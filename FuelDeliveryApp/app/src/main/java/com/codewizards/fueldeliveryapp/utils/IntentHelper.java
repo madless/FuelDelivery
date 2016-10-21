@@ -9,7 +9,7 @@ import com.codewizards.fueldeliveryapp.ui.delivery.DeliveryActivity;
  * Created by dmikhov on 21.10.2016.
  */
 public class IntentHelper {
-    public void openDeliveryActivity(Activity activity, int deliveryId) {
+    public static void openDeliveryActivity(Activity activity, int deliveryId) {
         Intent intent = new Intent(activity, DeliveryActivity.class);
         intent.putExtra(Const.EXTRA_DELIVERY_ID, deliveryId);
         activity.startActivity(intent);

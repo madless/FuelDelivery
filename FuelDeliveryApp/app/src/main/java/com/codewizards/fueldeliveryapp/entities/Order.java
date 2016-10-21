@@ -13,4 +13,13 @@ public class Order {
         this.city = city;
         this.amountOfFuel = amountOfFuel;
     }
+
+    @Override
+    public String toString() {
+        return "Order{" +
+                "id=" + id +
+                ", city=" + city +
+                ", amountOfFuel=" + amountOfFuel +
+                '}';
+    }
 }

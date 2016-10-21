@@ -36,13 +36,13 @@ public class Logger {
         debug(cls, message);
     }
 
-    public static void debug(Class<?> cls, String message) {
-        String text = cls.getSimpleName() + FILTER_MSG_NAME + message;
-        debugOutput(text);
+    public void d(String message) {
+        debug(cls, message);
     }
 
-    private static void debugOutput(String message) {
-        print(Log.DEBUG, message);
+    public static void debug(Class<?> cls, String message) {
+        String text = cls.getSimpleName() + FILTER_MSG_NAME + message;
+        print(Log.DEBUG, text);
     }
 
 
@@ -50,6 +50,10 @@ public class Logger {
      * INFO
      *********************************************************************************************/
     public void info(String message) {
+        info(cls, message);
+    }
+
+    public void i(String message) {
         info(cls, message);
     }
 
@@ -70,6 +74,10 @@ public class Logger {
         warn(cls, message);
     }
 
+    public void w(String msg) {
+        warn(msg);
+    }
+
     public static void warn(Class<?> cls, String message) {
         String text = cls.getSimpleName() + FILTER_MSG_NAME + message;
         warnOutput(text);
@@ -87,6 +95,9 @@ public class Logger {
         error(cls, message, e);
     }
 
+    public void e(String msg) {
+        error(msg);
+    }
     public void error(String message) {
         error(cls, message);
     }

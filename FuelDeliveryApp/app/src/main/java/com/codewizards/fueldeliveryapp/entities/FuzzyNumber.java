@@ -13,4 +13,9 @@ public class FuzzyNumber {
         this.x0 = x0;
         this.x2 = x2;
     }
+
+    @Override
+    public String toString() {
+        return "(" + x1 + ":" + x0 + ":" + x2 + ") ";
+    }
 }

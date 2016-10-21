@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import rx.Observable;
+import rx.Subscriber;
 
 /**
  * Created by dmikhov on 21.10.2016.
@@ -57,11 +58,33 @@ public class FuelDeliveryMockImpl implements FuelDeliveryApi {
 
     @Override
     public Observable<List<Delivery>> getDeliveries() {
-        return Observable.just(deliveries);
+        return Observable.create(new Observable.OnSubscribe<List<Delivery>>() {
+            @Override
+            public void call(Subscriber<? super List<Delivery>> subscriber) {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                subscriber.onNext(deliveries);
+                subscriber.onCompleted();
+            }
+        });
     }
 
     @Override
     public Observable<List<City>> getCities() {
-        return Observable.just(cities);
+        return Observable.create(new Observable.OnSubscribe<List<City>>() {
+            @Override
+            public void call(Subscriber<? super List<City>> subscriber) {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                subscriber.onNext(cities);
+                subscriber.onCompleted();
+            }
+        });
     }
 }

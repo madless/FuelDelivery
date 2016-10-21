@@ -5,10 +5,15 @@ package com.codewizards.fueldeliveryapp.entities;
  */
 public class Coordinates {
     private double latitude;
-    private double langitude;
+    private double longitude;
 
-    public Coordinates(double latitude, double langitude) {
+    public Coordinates(double latitude, double longitude) {
         this.latitude = latitude;
-        this.langitude = langitude;
+        this.longitude = longitude;
+    }
+
+    @Override
+    public String toString() {
+        return longitude + ":" + longitude;
     }
 }

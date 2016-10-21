@@ -13,4 +13,13 @@ public class City {
         this.name = name;
         this.coordinates = coordinates;
     }
+
+    @Override
+    public String toString() {
+        return "City{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", coordinates=" + coordinates +
+                '}';
+    }
 }

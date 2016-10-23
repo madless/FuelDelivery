@@ -3,6 +3,7 @@ package com.codewizards.fueldeliveryapp.repository;
 import com.codewizards.fueldeliveryapp.entities.City;
 import com.codewizards.fueldeliveryapp.entities.Delivery;
 import com.codewizards.fueldeliveryapp.entities.Order;
+import com.codewizards.fueldeliveryapp.net.BaseResponse;
 import com.codewizards.fueldeliveryapp.net.FuelDeliveryMockServer;
 import com.codewizards.fueldeliveryapp.utils.Logger;
 
@@ -46,5 +47,11 @@ public class CloudRepository implements IRepository {
 
     public void setUpdateListener(UpdateListener updateListener) {
         this.updateListener = updateListener;
+    }
+
+    @Override
+    public Observable<BaseResponse> addDelivery(Delivery delivery) {
+        Observable<BaseResponse> responseObservable = FuelDeliveryMockServer.getApi().addDelivery(delivery);
+        return responseObservable;
     }
 }

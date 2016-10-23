@@ -35,4 +35,8 @@ public class SimplePagerAdapter extends FragmentPagerAdapter {
     public CharSequence getPageTitle(int position) {
         return tabTitles.get(position);
     }
+
+    public void clearAll() {
+        fragments.clear();
+    }
 }

@@ -6,11 +6,17 @@
     android:layout_height="match_parent"
     android:id="@+id/coordinatorLayout">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rvDeliveries"
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefresh"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="gone"/>
+        android:layout_height="match_parent">
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rvDeliveries"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"/>
+    </android.support.v4.widget.SwipeRefreshLayout>
+
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -40,11 +46,11 @@
     </RelativeLayout>
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fabUpdate"
+        android:id="@+id/fabAdd"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_upd"
-        app:layout_anchor="@id/rvDeliveries"
+        android:src="@drawable/ic_add"
+        app:layout_anchor="@id/swipeRefresh"
         app:layout_anchorGravity="bottom|right|end"
         android:layout_margin="@dimen/dimen_16"/>
 

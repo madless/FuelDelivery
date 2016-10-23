@@ -19,6 +19,7 @@ public class DeliveryActivityPresenter extends BasePresenter {
     private boolean isDataFetched;
     private Subscription subscription;
     private int selectedDeliveryId;
+    private Delivery selectedDelivery;
 
     public void attachView(DeliveryActivity view) {
         this.view = view;
@@ -65,15 +66,15 @@ public class DeliveryActivityPresenter extends BasePresenter {
     }
 
     private void onDataFetchedSuccessfully(List<Delivery> deliveries) {
-        Delivery delivery = null;
+        selectedDelivery = null;
         for (Delivery temp: deliveries) {
             if(temp.getId() == selectedDeliveryId) {
-                delivery = temp;
+                selectedDelivery = temp;
                 break;
             }
         }
-        if(delivery != null) {
-            view.onLoadingFinishedSuccessfully(delivery);
+        if(selectedDelivery != null) {
+            view.onLoadingFinishedSuccessfully(selectedDelivery);
         } else {
             view.onLoadingFinishedUnsuccessfully();
         }
@@ -88,5 +89,9 @@ public class DeliveryActivityPresenter extends BasePresenter {
         if(subscription != null && !subscription.isUnsubscribed()) {
             subscription.unsubscribe();
         }
+    }
+
+    public Delivery getSelectedDelivery() {
+        return selectedDelivery;
     }
 }

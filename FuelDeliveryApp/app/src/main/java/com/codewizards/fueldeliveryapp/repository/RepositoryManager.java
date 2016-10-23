@@ -3,6 +3,7 @@ package com.codewizards.fueldeliveryapp.repository;
 import com.codewizards.fueldeliveryapp.entities.City;
 import com.codewizards.fueldeliveryapp.entities.Delivery;
 import com.codewizards.fueldeliveryapp.entities.Order;
+import com.codewizards.fueldeliveryapp.net.BaseResponse;
 import com.codewizards.fueldeliveryapp.utils.Logger;
 
 import java.util.List;
@@ -75,5 +76,10 @@ public class RepositoryManager implements IRepository, UpdateListener {
     public void updateCities(Observable<List<City>> cities) {
         logger.d("updateCities");
         localRepository.setCities(cities);
+    }
+
+    @Override
+    public Observable<BaseResponse> addDelivery(Delivery delivery) {
+        return cloudRepository.addDelivery(delivery);
     }
 }

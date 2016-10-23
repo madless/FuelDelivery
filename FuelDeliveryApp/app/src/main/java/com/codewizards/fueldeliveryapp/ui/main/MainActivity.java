@@ -2,11 +2,13 @@ package com.codewizards.fueldeliveryapp.ui.main;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.codewizards.fueldeliveryapp.R;
 import com.codewizards.fueldeliveryapp.entities.Delivery;
@@ -25,7 +27,8 @@ import butterknife.ButterKnife;
  * Created by dmikhov on 21.10.2016.
  */
 public class MainActivity extends BaseActivity {
-    @Bind(R.id.fabUpdate) FloatingActionButton fabUpdate;
+    @Bind(R.id.swipeRefresh) SwipeRefreshLayout swipeRefresh;
+    @Bind(R.id.fabAdd) FloatingActionButton fabAdd;
     @Bind(R.id.progressBar) ProgressBar progressBar;
     @Bind(R.id.rvDeliveries) RecyclerView rvDeliveries;
     @Bind(R.id.tvNoData) TextView tvNoData;
@@ -53,7 +56,11 @@ public class MainActivity extends BaseActivity {
         adapter.setOnDeliveryClickListener(delivery -> {
             IntentHelper.openDeliveryActivity(this, delivery.getId());
         });
-        fabUpdate.setOnClickListener(view -> presenter.updateData());
+        fabAdd.setOnClickListener(view -> Toast.makeText(MainActivity.this, "Not implemented", Toast.LENGTH_SHORT).show());
+        swipeRefresh.setOnRefreshListener(() -> {
+            swipeRefresh.setRefreshing(true);
+            presenter.updateData();
+        });
     }
 
     public void onLoadingStarted() {
@@ -65,6 +72,7 @@ public class MainActivity extends BaseActivity {
 
     public void onLoadingFinishedSuccessfully(List<Delivery> deliveries) {
         logger.d("onLoadingFinishedSuccessfully");
+        swipeRefresh.setRefreshing(false);
         progressBar.setVisibility(View.GONE);
         rvDeliveries.setVisibility(View.VISIBLE);
         tvNoData.setVisibility(View.GONE);
@@ -75,6 +83,7 @@ public class MainActivity extends BaseActivity {
 
     public void onLoadingFinishedUnsuccessfully() {
         logger.d("onLoadingFinishedUnsuccessfully()");
+        swipeRefresh.setRefreshing(false);
         progressBar.setVisibility(View.GONE);
         rvDeliveries.setVisibility(View.GONE);
         tvNoData.setVisibility(View.VISIBLE);

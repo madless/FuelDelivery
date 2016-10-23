@@ -14,6 +14,30 @@ public class Order {
         this.amountOfFuel = amountOfFuel;
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public City getCity() {
+        return city;
+    }
+
+    public void setCity(City city) {
+        this.city = city;
+    }
+
+    public FuzzyNumber getAmountOfFuel() {
+        return amountOfFuel;
+    }
+
+    public void setAmountOfFuel(FuzzyNumber amountOfFuel) {
+        this.amountOfFuel = amountOfFuel;
+    }
+
     @Override
     public String toString() {
         return "Order{" +

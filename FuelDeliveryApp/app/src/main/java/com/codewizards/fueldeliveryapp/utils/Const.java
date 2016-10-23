@@ -10,4 +10,6 @@ public class Const {
 
     public static final String PRESENTER_MAIN_ACTIVITY = "PRESENTER_MAIN_ACTIVITY";
     public static final String PRESENTER_DELIVERY_ACTIVITY = "PRESENTER_DELIVERY_ACTIVITY";
+
+    public static final Integer RESPONSE_OK = 200;
 }

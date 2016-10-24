@@ -40,11 +40,11 @@ public class FuelDeliveryMockImpl implements FuelDeliveryApi {
         City city4 = new City(3, "New York", cd4);
         City city5 = new City(4, "Nikolaev", cd5);
         float res[] = new float[2];
-        Location.distanceBetween(cd1.getLatitude(), cd2.getLongitude(), -9.093525, 49.522275, res);
+        Location.distanceBetween(cd1.getLat(), cd2.getLon(), -9.093525, 49.522275, res);
         Log.e("madlog", "dublin dist 11: " + res[0]);
-        Location.distanceBetween(cd1.getLatitude(), cd2.getLongitude(), 36.505379, 43.350728, res);
+        Location.distanceBetween(cd1.getLat(), cd2.getLon(), 36.505379, 43.350728, res);
         Log.e("madlog", "dublin dist 8: " + res[0]);
-        Location.distanceBetween(cd5.getLatitude(), cd5.getLongitude(), 36.505379, 43.350728, res);
+        Location.distanceBetween(cd5.getLat(), cd5.getLon(), 36.505379, 43.350728, res);
         Log.e("madlog", "nik dist 8: " + res[0]);
         FuzzyNumber fn1 = new FuzzyNumber(100, 100, 200);
         FuzzyNumber fn2 = new FuzzyNumber(100, 150, 250);
@@ -58,10 +58,10 @@ public class FuelDeliveryMockImpl implements FuelDeliveryApi {
         Order o5 = new Order(4, city5, fn5);
         List<Order> orders1 = new ArrayList<>();
         List<Order> orders2 = new ArrayList<>();
-        orders1.add(o1);
-        orders1.add(o2);
-        orders1.add(o3);
-        orders1.add(o5);
+        orders1.add(o1); // 1
+        orders1.add(o3); // 3
+        orders1.add(o2); // 2
+        orders1.add(o5); // 5
         orders2.add(o4);
         Delivery d1 = new Delivery(0, "Sea delivery 1", orders1);
         Delivery d2 = new Delivery(1, "Sea delivery 2", orders2);

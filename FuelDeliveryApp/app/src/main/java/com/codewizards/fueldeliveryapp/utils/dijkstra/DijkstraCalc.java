@@ -1,9 +1,11 @@
-package main;
+package com.codewizards.fueldeliveryapp.utils.dijkstra;
 
-import main.entities.Coordinates;
-import main.entities.Edge;
-import main.entities.Graph;
-import main.entities.Vertex;
+
+import com.codewizards.fueldeliveryapp.entities.Coordinates;
+import com.codewizards.fueldeliveryapp.utils.Logger;
+import com.codewizards.fueldeliveryapp.utils.dijkstra.entities.Edge;
+import com.codewizards.fueldeliveryapp.utils.dijkstra.entities.Graph;
+import com.codewizards.fueldeliveryapp.utils.dijkstra.entities.Vertex;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -13,21 +15,31 @@ import java.util.List;
  * Created by dmikhov on 24.10.2016.
  */
 public class DijkstraCalc {
+    private Logger logger = Logger.getLogger(this.getClass());
+    private Graph graph;
     private Vertex start;
     private Vertex finish;
+    private Edge startConnectorEdge;
+    private Edge finalConnectorEdge;
     public List<Vertex> getShortestPath(Graph graph, Coordinates startCity, Coordinates finalCity) {
+        this.graph = graph;
+        reset();
         addSearchedCitiesToGraph(graph, startCity, finalCity);
         initStartValue();
         boolean isPassedAllGraph = false;
         while (!isPassedAllGraph) {
             Vertex minimal = findMinimal(graph);
-            System.out.println("Minimal: " + minimal);
+            logger.d("Minimal: " + minimal);
             if(minimal != null) {
                 visit(minimal);
             } else {
                 isPassedAllGraph = true;
             }
         }
+        graph.getVertexes().remove(start);
+        graph.getVertexes().remove(finish);
+        graph.getEdges().remove(startConnectorEdge);
+        graph.getEdges().remove(finalConnectorEdge);
         return finish.getMinPath();
     }
 
@@ -38,12 +50,10 @@ public class DijkstraCalc {
         finish = new Vertex(finalIndex, finalCity.getLat(), finalCity.getLon());
         Vertex startConnector = MapMath.getNearest(graph.getVertexes(), startCity);
         Vertex finishConnector = MapMath.getNearest(graph.getVertexes(), finalCity);
-        System.out.println("startConnector: " + startConnector);
-        System.out.println("finishConnector: " + finishConnector);
         int startEdgeIndex = graph.getNextEdgeId();
         int finalEdgeIndex = startEdgeIndex + 1;
-        Edge startConnectorEdge = new Edge(startEdgeIndex, start.getId(), startConnector.getId());
-        Edge finalConnectorEdge = new Edge(finalEdgeIndex, finish.getId(), finishConnector.getId());
+        startConnectorEdge = new Edge(startEdgeIndex, start.getId(), startConnector.getId());
+        finalConnectorEdge = new Edge(finalEdgeIndex, finish.getId(), finishConnector.getId());
         graph.putEdge(startConnectorEdge);
         graph.putEdge(finalConnectorEdge);
         graph.putVertex(start);
@@ -84,10 +94,10 @@ public class DijkstraCalc {
     public void recalculateValue(Vertex startVertex, Vertex vertexToRecalculate, Edge e) {
         long newValue = startVertex.getValue() + e.getWeight();
         if(newValue < vertexToRecalculate.getValue()) {
+            logger.d("recalculateValue of id: " + vertexToRecalculate.getId() + ", newValue: " + newValue);
             vertexToRecalculate.setValue(newValue);
             vertexToRecalculate.setMinPath(startVertex.getMinPath());
             vertexToRecalculate.getMinPath().add(vertexToRecalculate);
-            System.out.println("vertexToRecalculate: " + vertexToRecalculate.getId() + ", set value: " + newValue + ", setMinPath: " + vertexToRecalculate.getMinPath());
         }
     }
 
@@ -107,6 +117,9 @@ public class DijkstraCalc {
     private void reset() {
         start = null;
         finish = null;
+        startConnectorEdge = null;
+        finalConnectorEdge = null;
+        graph.resetValues();
     }
 
 }

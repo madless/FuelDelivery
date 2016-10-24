@@ -1,4 +1,4 @@
-package main.entities;
+package com.codewizards.fueldeliveryapp.utils.dijkstra.entities;
 
 /**
  * Created by dmikhov on 24.10.2016.
@@ -67,9 +67,9 @@ public class Edge {
 
     @Override
     public String toString() {
-        return "" + id;
-//                ", first=" + first.getId() +
-//                ", second=" + second.getId() +
-//                ", weight=" + weight +
+        return "" + id +
+                ", first=" + first.getId() +
+                ", second=" + second.getId() +
+                ", weight=" + weight;
     }
 }

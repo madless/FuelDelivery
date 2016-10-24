@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <graph>
-	<vertex id="1" long="43.155974" lat="31.048280"/> <!-- black sea 1-->
-	<vertex id="2" long="39.388496" lat="24.873168"/> <!-- aegean sea 1-->
-	<vertex id="3" long="33.798759" lat="29.585709"/> <!-- mediterranean sea 1-->
-	<vertex id="4" long="34.246520" lat="16.485491"/> <!-- mediterranean sea 2-->
-	<vertex id="5" long="38.819536" lat="4.821656"/> <!-- mediterranean sea 3--> 
-	<vertex id="6" long="35.997311" lat="-6.224229"/> <!-- mediterranean sea 4 hibraaltar--> 
-	<vertex id="7" long="38.277655" lat="18.335662"/> <!-- ionic sea --> 
-	<vertex id="8" long="36.505379" lat="43.350728"/> <!-- black sea 2-->
+	<vertex id="1" long="43.155974" lat="31.048280"/>
+	<vertex id="2" long="39.388496" lat="24.873168"/>
+	<vertex id="3" long="33.798759" lat="29.585709"/> 
+	<vertex id="4" long="34.246520" lat="16.485491"/>
+	<vertex id="5" long="38.819536" lat="4.821656"/> 
+	<vertex id="6" long="35.997311" lat="-6.224229"/>
+	<vertex id="7" long="38.277655" lat="18.335662"/>
+	<vertex id="8" long="36.505379" lat="43.350728"/>
 	<vertex id="9" long="14.664559" lat="43.750261"/>
 	<vertex id="10" long="-15.861103" lat="40.343364"/>
 	<vertex id="11" long="-9.093525" lat="49.522275"/>

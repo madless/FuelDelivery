@@ -1,6 +1,7 @@
-package main;
+package com.codewizards.fueldeliveryapp.utils.dijkstra;
 
-import main.entities.Edge;
+
+import com.codewizards.fueldeliveryapp.utils.dijkstra.entities.Edge;
 
 import java.util.Comparator;
 

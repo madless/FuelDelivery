@@ -1,16 +1,24 @@
-package main;
+package com.codewizards.fueldeliveryapp.utils.dijkstra;
 
-import main.entities.Edge;
-import main.entities.Graph;
-import main.entities.Vertex;
-import org.w3c.dom.*;
+
+import com.codewizards.fueldeliveryapp.utils.dijkstra.entities.Edge;
+import com.codewizards.fueldeliveryapp.utils.dijkstra.entities.Graph;
+import com.codewizards.fueldeliveryapp.utils.dijkstra.entities.Vertex;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
+
+import java.io.IOException;
+import java.io.InputStream;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import java.io.File;
-import java.io.IOException;
 
 /**
  * Created by dmikhov on 24.10.2016.
@@ -19,11 +27,14 @@ public class DijkstraXmlParser {
 
     Graph graph;
 
-    public Graph getGraph(String path) throws ParserConfigurationException, IOException, SAXException {
+    public Graph getGraph(InputStream is) throws ParserConfigurationException, IOException, SAXException {
         graph = new Graph();
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         DocumentBuilder db = dbf.newDocumentBuilder();
-        Document doc = db.parse(new File(path));
+        InputSource inputSource = new InputSource();
+        inputSource.setByteStream(is);
+//        inputSource.setCharacterStream(new StringReader("xml"));
+        Document doc = db.parse(inputSource);
         visit(doc.getFirstChild());
         graph.tie();
         return graph;
@@ -49,7 +60,6 @@ public class DijkstraXmlParser {
                     float lon = Float.valueOf(atrs.getNamedItem("long").getNodeValue());
                     Vertex vertex = new Vertex(id, lat, lon);
                     graph.putVertex(vertex);
-//                    System.out.println(vertex);
                     break;
                 }
                 case "edge": {
@@ -58,7 +68,6 @@ public class DijkstraXmlParser {
                     int secondId = Integer.valueOf(atrs.getNamedItem("secondId").getNodeValue());
                     Edge edge = new Edge(id, firstId, secondId);
                     graph.putEdge(edge);
-//                    System.out.println(edge);
                     break;
                 }
             }

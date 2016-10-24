@@ -1,6 +1,7 @@
-package main.entities;
+package com.codewizards.fueldeliveryapp.utils.dijkstra.entities;
 
-import main.MapMath;
+import com.codewizards.fueldeliveryapp.utils.Logger;
+import com.codewizards.fueldeliveryapp.utils.dijkstra.MapMath;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,6 +10,7 @@ import java.util.List;
  * Created by dmikhov on 24.10.2016.
  */
 public class Graph {
+    Logger logger = Logger.getLogger(this.getClass());
     List<Vertex> vertexes = new ArrayList<>();
     List<Edge> edges = new ArrayList<>();
 
@@ -98,15 +100,21 @@ public class Graph {
         }
     }
 
-    public void print() {
-        System.out.println("Vertexes: ");
+    public void resetValues() {
         for (Vertex v: vertexes) {
-            System.out.println(v);
+            v.setValue(Long.MAX_VALUE);
+            v.setVisited(false);
         }
-        System.out.println("");
-        System.out.println("Edges:");
+    }
+
+    public void print() {
+        logger.d("Vertexes: ");
+        for (Vertex v: vertexes) {
+            logger.d(v.toString());
+        }
+        logger.d("Edges:");
         for (Edge e: edges) {
-            System.out.println(e);
+            logger.d(e.toString());
         }
     }
 }

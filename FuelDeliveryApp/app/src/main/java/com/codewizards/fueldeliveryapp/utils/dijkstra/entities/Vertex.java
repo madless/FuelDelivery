@@ -1,4 +1,6 @@
-package main.entities;
+package com.codewizards.fueldeliveryapp.utils.dijkstra.entities;
+
+import com.codewizards.fueldeliveryapp.entities.Coordinates;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -95,10 +97,10 @@ public class Vertex {
 
     @Override
     public String toString() {
-        return "" + id;
+        return id + ", c=" + coordinates;
 //                ", value=" + value +
-//                ", minPath=" + minPath +
-//                ", coordinates=" + coordinates +
-//                ", edges=" + edges +
+//                ", minPath=" + minPath;
+//
+
     }
 }

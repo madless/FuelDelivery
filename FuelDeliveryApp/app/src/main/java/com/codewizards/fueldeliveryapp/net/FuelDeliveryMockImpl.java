@@ -1,5 +1,8 @@
 package com.codewizards.fueldeliveryapp.net;
 
+import android.location.Location;
+import android.util.Log;
+
 import com.codewizards.fueldeliveryapp.entities.City;
 import com.codewizards.fueldeliveryapp.entities.Coordinates;
 import com.codewizards.fueldeliveryapp.entities.Delivery;
@@ -36,6 +39,13 @@ public class FuelDeliveryMockImpl implements FuelDeliveryApi {
         City city3 = new City(2, "Istanbul", cd3);
         City city4 = new City(3, "New York", cd4);
         City city5 = new City(4, "Nikolaev", cd5);
+        float res[] = new float[2];
+        Location.distanceBetween(cd1.getLatitude(), cd2.getLongitude(), -9.093525, 49.522275, res);
+        Log.e("madlog", "dublin dist 11: " + res[0]);
+        Location.distanceBetween(cd1.getLatitude(), cd2.getLongitude(), 36.505379, 43.350728, res);
+        Log.e("madlog", "dublin dist 8: " + res[0]);
+        Location.distanceBetween(cd5.getLatitude(), cd5.getLongitude(), 36.505379, 43.350728, res);
+        Log.e("madlog", "nik dist 8: " + res[0]);
         FuzzyNumber fn1 = new FuzzyNumber(100, 100, 200);
         FuzzyNumber fn2 = new FuzzyNumber(100, 150, 250);
         FuzzyNumber fn3 = new FuzzyNumber(90, 160, 170);

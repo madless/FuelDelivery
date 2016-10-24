@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<graph>
+	<vertex id="1" long="43.155974" lat="31.048280"/> <!-- black sea 1-->
+	<vertex id="2" long="39.388496" lat="24.873168"/> <!-- aegean sea 1-->
+	<vertex id="3" long="33.798759" lat="29.585709"/> <!-- mediterranean sea 1-->
+	<vertex id="4" long="34.246520" lat="16.485491"/> <!-- mediterranean sea 2-->
+	<vertex id="5" long="38.819536" lat="4.821656"/> <!-- mediterranean sea 3--> 
+	<vertex id="6" long="35.997311" lat="-6.224229"/> <!-- mediterranean sea 4 hibraaltar--> 
+	<vertex id="7" long="38.277655" lat="18.335662"/> <!-- ionic sea --> 
+	<vertex id="8" long="36.505379" lat="43.350728"/> <!-- black sea 2-->
+	<vertex id="9" long="14.664559" lat="43.750261"/>
+	<vertex id="10" long="-15.861103" lat="40.343364"/>
+	<vertex id="11" long="-9.093525" lat="49.522275"/>
+	<vertex id="12" long="-52.072041" lat="30.436303"/>
+	<vertex id="13" long="1.187861" lat="50.687791"/>
+	<vertex id="14" long="1.539423" lat="57.583472"/>
+	<vertex id="15" long="9.976923" lat="58.330944"/>
+	<vertex id="16" long="13.316767" lat="54.968705"/>
+	<vertex id="17" long="21.226923" lat="59.333393"/>
+	<vertex id="18" long="11.569522" lat="68.959955"/>
+	<vertex id="19" long="-16.775204" lat="63.287954"/>
+	
+	<edge id="1" firstId="1" secondId="8"/>
+	<edge id="2" firstId="1" secondId="2"/>
+	<edge id="3" firstId="2" secondId="3"/>
+	<edge id="4" firstId="3" secondId="4"/>
+	<edge id="5" firstId="4" secondId="7"/>
+	<edge id="6" firstId="7" secondId="9"/>
+	<edge id="7" firstId="4" secondId="5"/>
+	<edge id="8" firstId="5" secondId="6"/>
+	<edge id="9" firstId="6" secondId="10"/>
+	<edge id="10" firstId="10" secondId="11"/>
+	<edge id="11" firstId="10" secondId="12"/>
+	<edge id="12" firstId="11" secondId="12"/>
+	<edge id="13" firstId="11" secondId="13"/>
+	<edge id="14" firstId="13" secondId="14"/>
+	<edge id="15" firstId="14" secondId="15"/>
+	<edge id="16" firstId="15" secondId="16"/>
+	<edge id="17" firstId="16" secondId="17"/>
+	<edge id="18" firstId="14" secondId="18"/>
+	<edge id="19" firstId="14" secondId="19"/>
+	<edge id="20" firstId="18" secondId="19"/>
+	<edge id="21" firstId="11" secondId="19"/>
+	<edge id="22" firstId="12" secondId="19"/>
+</graph>

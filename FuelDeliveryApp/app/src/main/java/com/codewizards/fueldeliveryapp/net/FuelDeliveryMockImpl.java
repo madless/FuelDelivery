@@ -35,6 +35,7 @@ public class FuelDeliveryMockImpl implements FuelDeliveryApi {
         Coordinates cd5 = new Coordinates(46.975033, 31.994583);
         Coordinates cd6 = new Coordinates(45.440847, 12.315515);
         Coordinates cd7 = new Coordinates(44.405650, 8.946256);
+        Coordinates cd8 = new Coordinates(37.983810, 23.727539);
         City city1 = new City(0, "Dublin", cd1);
         City city2 = new City(1, "Odessa", cd2);
         City city3 = new City(2, "Istanbul", cd3);
@@ -42,6 +43,7 @@ public class FuelDeliveryMockImpl implements FuelDeliveryApi {
         City city5 = new City(4, "Nikolaev", cd5);
         City city6 = new City(5, "Venezia", cd6);
         City city7 = new City(6, "Genova", cd7);
+        City city8 = new City(7, "Athens", cd8);
         FuzzyNumber fn1 = new FuzzyNumber(100, 100, 200);
         FuzzyNumber fn2 = new FuzzyNumber(100, 150, 250);
         FuzzyNumber fn3 = new FuzzyNumber(90, 160, 170);
@@ -49,6 +51,7 @@ public class FuelDeliveryMockImpl implements FuelDeliveryApi {
         FuzzyNumber fn5 = new FuzzyNumber(100, 120, 170);
         FuzzyNumber fn6 = new FuzzyNumber(30, 50, 100);
         FuzzyNumber fn7 = new FuzzyNumber(100, 120, 130);
+        FuzzyNumber fn8 = new FuzzyNumber(100, 150, 200);
 //        Order o1 = new Order(0, city1, fn1);
         Order o2 = new Order(1, city2, fn2);
         Order o3 = new Order(2, city3, fn3);
@@ -56,10 +59,12 @@ public class FuelDeliveryMockImpl implements FuelDeliveryApi {
         Order o5 = new Order(4, city5, fn5);
         Order o6 = new Order(5, city6, fn6);
         Order o7 = new Order(6, city7, fn7);
+        Order o8 = new Order(7, city8, fn8);
         List<Order> orders1 = new ArrayList<>();
         List<Order> orders2 = new ArrayList<>();
 //        orders1.add(o1);
         orders1.add(o7); // 7
+        orders1.add(o8);
         orders1.add(o3); // 3
         orders1.add(o2); // 2
         orders1.add(o5); // 5
@@ -75,6 +80,7 @@ public class FuelDeliveryMockImpl implements FuelDeliveryApi {
         cities.add(city5);
         cities.add(city6);
         cities.add(city7);
+        cities.add(city8);
         response = new BaseResponse(200);
     }
 

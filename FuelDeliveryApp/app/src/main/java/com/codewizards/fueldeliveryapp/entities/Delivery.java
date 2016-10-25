@@ -8,19 +8,15 @@ import java.util.List;
 public class Delivery {
     private int id;
     private String name;
+    private City sourceCity;
     private FuzzyNumber amountOfFuel; // amount of fuel on a ship
     private List<Order> orders;
 
-    public Delivery(int id, String name, List<Order> orders) {
+    public Delivery(int id, String name, City sourceCity, int amountOfFuel, List<Order> orders) {
         this.id = id;
         this.name = name;
-        this.orders = orders;
-    }
-
-    public Delivery(int id, String name, FuzzyNumber amountOfFuel, List<Order> orders) {
-        this.id = id;
-        this.name = name;
-        this.amountOfFuel = amountOfFuel;
+        this.sourceCity = sourceCity;
+        this.amountOfFuel = new FuzzyNumber(amountOfFuel, amountOfFuel, amountOfFuel);
         this.orders = orders;
     }
 
@@ -61,6 +57,14 @@ public class Delivery {
 
     public void setAmountOfFuel(FuzzyNumber amountOfFuel) {
         this.amountOfFuel = amountOfFuel;
+    }
+
+    public City getSourceCity() {
+        return sourceCity;
+    }
+
+    public void setSourceCity(City sourceCity) {
+        this.sourceCity = sourceCity;
     }
 
     @Override

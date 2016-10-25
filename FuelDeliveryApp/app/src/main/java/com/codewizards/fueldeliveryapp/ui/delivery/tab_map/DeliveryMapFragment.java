@@ -4,11 +4,13 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Interpolator;
 import android.view.animation.LinearInterpolator;
+import android.widget.Toast;
 
 import com.codewizards.fueldeliveryapp.R;
 import com.codewizards.fueldeliveryapp.entities.City;
@@ -32,6 +34,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.maps.android.ui.IconGenerator;
 
 import org.xml.sax.SAXException;
 
@@ -41,6 +44,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.parsers.ParserConfigurationException;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
 
 /**
  * Created by dmikhov on 21.10.2016.
@@ -55,79 +61,54 @@ public class DeliveryMapFragment extends BaseTabFragment implements OnMapReadyCa
     private static final int SHIP_STEP_DELAY = 5;
     private static final int IN_CITY_DELAY = 1000;
     private static final String SHIP_ROUTE_FORMAT = "%s -> %s";
-    private static final String SHIP_SNIPPET_FORMAT = "Fuel: %s";
+    private static final String SHIP_FUEL_FORMAT = "Fuel: %s";
 
+    @Bind(R.id.fabStartDelivery) FloatingActionButton fabDelivery;
+
+    private IconGenerator iconFactory;
     private GoogleMap map;
     private int index;
     private int pathIndex;
     private Polyline polyline;
     private PolylineOptions rectOptions = new PolylineOptions();
     private List<Marker> markers = new ArrayList<>();
-    private Marker selectedMarker;
     private Handler handler = new Handler();
-    private PathAnimator pathAnimator = new PathAnimator();
+    private PathAnimator pathAnimator;
     private Marker trackingMarker;
     private Graph seaGraph;
     private List<Path> seaPathes = new ArrayList<>();
-    private Order firstOrder;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        iconFactory = new IconGenerator(getContext());
+        iconFactory.setStyle(R.style.CityInfoText);
+        pathAnimator = new PathAnimator();
+    }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_delivery_map, container, false);
+        ButterKnife.bind(this, root);
         return root;
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
-        InputStream is = getResources().openRawResource(R.raw.sea);
-        DijkstraXmlParser parser = new DijkstraXmlParser();
-        try {
-            seaGraph = parser.getGraph(is);
-//            seaGraph.print();
-            List<Order> orders = getOrders();
-            firstOrder = orders.get(0);
-            DijkstraCalc dijkstraCalc = new DijkstraCalc();
-            for (int i = 0; i < orders.size() - 1; i++) {
-                Order orderFrom = orders.get(i);
-                Order orderTo = orders.get(i + 1);
-                List<Vertex> shortestPath = dijkstraCalc.getShortestPath(seaGraph, orderFrom.getCity().getCoordinates(), orderTo.getCity().getCoordinates());
-                logger.w("shortestPath: " + shortestPath);
-                seaPathes.add(new Path(orderFrom.getCity(), orderTo.getCity(), shortestPath));
-            }
-            mapFragment.getMapAsync(this);
-        } catch (ParserConfigurationException | SAXException | IOException e) {
-            e.printStackTrace();
-        }
-
-    }
-
-    @Override
-    public void onMapReady(GoogleMap map) {
-        this.map = map;
-        if(activity != null && activity.getDelivery() != null && activity.getDelivery().getOrders() != null) {
-            List<Order> orders = activity.getDelivery().getOrders();
-            for (Order order: orders) {
-                if(order != null && order.getCity() != null && order.getCity().getCoordinates() != null) {
-                    City city = order.getCity();
-                    Coordinates location = city.getCoordinates();
-                    LatLng coordinates = new LatLng(location.getLat(), location.getLon());
-                    Marker marker = map.addMarker(new MarkerOptions().position(coordinates).title(city.getName()));
-                    markers.add(marker);
-                }
-            }
-            map.getUiSettings().setScrollGesturesEnabled(false);
-            handler.postDelayed(() -> {
-                City city = firstOrder.getCity();
+        initPathesData(); // before mapFragment.getMapAsync(this) !
+        fabDelivery.setOnClickListener(view1 -> {
+            if(map != null) {
+                map.getUiSettings().setScrollGesturesEnabled(false);
+                City city = getDelivery().getSourceCity();
                 Coordinates location = city.getCoordinates();
                 LatLng coordinates = new LatLng(location.getLat(), location.getLon());
                 trackingMarker = map.addMarker(new MarkerOptions()
                         .position(coordinates)
                         .title(String.format(SHIP_ROUTE_FORMAT, getCurrentPath().getFrom().getName(), getCurrentPath().getTo().getName()))
                         .icon(BitmapDescriptorFactory.fromResource(R.drawable.img_ship_small))
-                        .snippet(String.format(SHIP_SNIPPET_FORMAT, getDelivery().getAmountOfFuel().toString()))
+                        .snippet(String.format(SHIP_FUEL_FORMAT, getDelivery().getAmountOfFuel().toString()))
                 );
                 trackingMarker.showInfoWindow();
                 polyline = map.addPolyline(rectOptions);
@@ -140,15 +121,81 @@ public class DeliveryMapFragment extends BaseTabFragment implements OnMapReadyCa
                         CameraUpdateFactory.newCameraPosition(cameraPosition),
                         CAMERA_SPEED,
                         simpleAnimationCancelableCallback);
-            }, START_DELAY);
+            } else {
+                Toast.makeText(getContext(), "Map is not ready yet!", Toast.LENGTH_SHORT).show();
+            }
+        });
+        SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
+    }
+
+    @Override
+    public void onMapReady(GoogleMap map) {
+        this.map = map;
+        if(activity != null && activity.getDelivery() != null && activity.getDelivery().getOrders() != null) {
+            LatLng srcLocation = new LatLng(getDelivery().getSourceCity().getCoordinates().getLat(), getDelivery().getSourceCity().getCoordinates().getLon());
+            Marker srcMarker = map.addMarker(new MarkerOptions()
+                    .position(srcLocation)
+                    .title(getDelivery().getSourceCity().getName())
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET))
+            );
+            markers.add(srcMarker);
+            List<Order> orders = activity.getDelivery().getOrders();
+            for (Order order: orders) {
+                if(order != null && order.getCity() != null && order.getCity().getCoordinates() != null) {
+                    City city = order.getCity();
+                    LatLng location = new LatLng(city.getCoordinates().getLat(), city.getCoordinates().getLon());
+                    Marker marker = map.addMarker(new MarkerOptions()
+                            .position(location)
+                            .title(city.getName())
+                            .snippet(String.format(SHIP_FUEL_FORMAT, order.getAmountOfFuel().toString()))
+                    );
+                    String name = city.getName();
+                    String fuel = order.getAmountOfFuel().toString();
+                    marker.setIcon(BitmapDescriptorFactory.fromBitmap(iconFactory.makeIcon(name + ": " + fuel)));
+                    markers.add(marker);
+                }
+            }
+        }
+    }
+
+    public void initPathesData() {
+        InputStream is = getResources().openRawResource(R.raw.sea);
+        DijkstraXmlParser parser = new DijkstraXmlParser();
+        try {
+            seaGraph = parser.getGraph(is);
+            List<Order> orders = getOrders();
+            List<City> cities = new ArrayList<>(orders.size() + 1);
+            cities.add(getDelivery().getSourceCity());
+            for (Order order: orders) {
+                cities.add(order.getCity());
+            }
+            DijkstraCalc dijkstraCalc = new DijkstraCalc();
+            for (int i = 0; i < cities.size() - 1; i++) {
+                City from = cities.get(i);
+                City to = cities.get(i + 1);
+                List<Vertex> shortestPath = dijkstraCalc.getShortestPath(seaGraph, from.getCoordinates(), to.getCoordinates());
+                logger.d("Shortest path: " + shortestPath);
+                seaPathes.add(new Path(from, to, shortestPath));
+            }
+        } catch (ParserConfigurationException | SAXException | IOException e) {
+            e.printStackTrace();
         }
     }
 
     public void updateTrackingMarkerInfo() {
         logger.i("updateTrackingMarkerInfo(): " + String.format(SHIP_ROUTE_FORMAT, getCurrentPath().getFrom().getName(), getCurrentPath().getTo().getName()));
         trackingMarker.setTitle(String.format(SHIP_ROUTE_FORMAT, getCurrentPath().getFrom().getName(), getCurrentPath().getTo().getName()));
-        trackingMarker.setSnippet(String.format(SHIP_SNIPPET_FORMAT, getDelivery().getAmountOfFuel().toString()));
+        trackingMarker.setSnippet(String.format(SHIP_FUEL_FORMAT, getDelivery().getAmountOfFuel().toString()));
         trackingMarker.showInfoWindow();
+    }
+
+    public void updateCityMarker() {
+        markers.get(pathIndex).setIcon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_ok));
+    }
+
+    public void updateLastCityMarker() {
+        markers.get(markers.size() - 1).setIcon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_ok));
     }
 
     public List<Vertex> getCurrentPathVertexes() {
@@ -162,8 +209,7 @@ public class DeliveryMapFragment extends BaseTabFragment implements OnMapReadyCa
     GoogleMap.CancelableCallback simpleAnimationCancelableCallback =
             new GoogleMap.CancelableCallback(){
                 @Override
-                public void onCancel() {
-                }
+                public void onCancel() {}
                 @Override
                 public void onFinish() {
                     pathAnimator.start();
@@ -233,7 +279,7 @@ public class DeliveryMapFragment extends BaseTabFragment implements OnMapReadyCa
                 // move path
                 handler.postDelayed(this, SHIP_STEP_DELAY);
             } else {
-                logger.d("t >= 0, index: " + index + ", markers.size(): " + markers.size());
+                logger.d("t >= 0, index: " + index);
                 if(index < getCurrentPathVertexes().size() - 2) {
                     index++;
                     Coordinates c = getCurrentPathVertexes().get(index).getCoordinates();
@@ -254,9 +300,12 @@ public class DeliveryMapFragment extends BaseTabFragment implements OnMapReadyCa
                         pathIndex++;
                         index = 0;
                         updateTrackingMarkerInfo();
+                        updateCityMarker();
                         handler.postDelayed(this::start, IN_CITY_DELAY);
                     } else {
-                        map.getUiSettings().setScrollGesturesEnabled(true);
+                        logger.i("Route passed! pathIndex: " + pathIndex);
+                        updateLastCityMarker();
+                        map.getUiSettings().setScrollGesturesEnabled(true); // enable map moves by tapping
                     }
                 }
 

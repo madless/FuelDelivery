@@ -63,11 +63,12 @@ public class FuelDeliveryMockImpl implements FuelDeliveryApi {
         List<Order> orders1 = new ArrayList<>();
         List<Order> orders2 = new ArrayList<>();
 //        orders1.add(o1);
-        orders1.add(o7); // 7
-        orders1.add(o8);
-        orders1.add(o3); // 3
-        orders1.add(o2); // 2
-        orders1.add(o5); // 5
+        orders1.add(o7); // Genova
+        orders1.add(o6); // Venezia
+        orders1.add(o8); // Athens
+        orders1.add(o3); // Istanbul
+        orders1.add(o2); // Odessa
+        orders1.add(o5); // Nikolaev
         orders2.add(o4);
         Delivery d1 = new Delivery(0, "Sea delivery 1", city1, 700, orders1);
         Delivery d2 = new Delivery(1, "Sea delivery 2", city1, 300, orders2);

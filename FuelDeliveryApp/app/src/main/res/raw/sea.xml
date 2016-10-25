@@ -8,7 +8,7 @@
     <vertex id="6" lat="35.997311" long="-6.224229"/>
     <vertex id="7" lat="38.277655" long="18.335662"/>
     <vertex id="8" lat="36.505379" long="43.350728"/>
-    <vertex id="9" lat="14.664559" long="43.750261"/>
+    <vertex id="9" lat="43.750261" long="14.664559"/>
     <vertex id="10" lat="40.343364" long="-15.861103"/>
     <vertex id="11" lat="49.522275" long="-9.093525"/>
     <vertex id="12" lat="30.436303" long="-52.072041"/>
@@ -20,23 +20,30 @@
     <vertex id="18" lat="68.959955" long="11.569522"/>
     <vertex id="19" lat="63.287954" long="-16.775204"/>
     <vertex id="20" lat="52.399652" long="-5.539696"/>
-    <vertex id="21" lat="51.128390" long="-5.440819"/>
-    <vertex id="22" lat="45.989530" long="-11.230614"/>
+    <vertex id="21" lat="51.12839" long="-5.440819"/>
+    <vertex id="22" lat="45.98953" long="-11.230614"/>
     <vertex id="23" lat="37.182241" long="-11.131737"/>
     <vertex id="24" lat="37.239357" long="0.513771"/>
     <vertex id="25" lat="38.484837" long="11.060646"/>
     <vertex id="26" lat="38.484837" long="11.060646"/>
     <vertex id="27" lat="41.891834" long="10.522316"/>
     <vertex id="28" lat="34.954888" long="22.530372"/>
-    <vertex id="29" lat="36.117756" long="23.804786"/>
+    <vertex id="29" lat="37.262778" long="25.643805"/>
     <vertex id="30" lat="54.662142" long="3.436134"/>
+    <vertex id="31" lat="37.160662" long="23.721345"/>
+    <vertex id="32" lat="39.856456" long="25.813807"/>
+    <vertex id="33" lat="40.98742" long="28.976969"/>
+    <vertex id="34" lat="45.967867" long="31.210247"/>
+    <vertex id="35" lat="40.46336" long="26.928919"/>
+    <vertex id="36" lat="41.36286" long="18.668174"/>
+    <vertex id="37" lat="44.847012" long="12.900352"/>
 
     <edge id="1" firstId="1" secondId="8"/>
-    <edge id="2" firstId="1" secondId="2"/>
+    <edge id="2" firstId="29" secondId="31"/>
     <edge id="3" firstId="2" secondId="29"/>
     <edge id="4" firstId="29" secondId="3"/>
     <edge id="5" firstId="4" secondId="7"/>
-    <edge id="6" firstId="7" secondId="9"/>
+    <edge id="6" firstId="7" secondId="36"/>
     <edge id="7" firstId="3" secondId="28"/>
     <edge id="8" firstId="29" secondId="28"/>
     <edge id="9" firstId="7" secondId="28"/>
@@ -71,4 +78,12 @@
     <edge id="38" firstId="23" secondId="12"/>
     <edge id="39" firstId="20" secondId="21"/>
     <edge id="40" firstId="11" secondId="21"/>
+    <edge id="41" firstId="36" secondId="9"/>
+    <edge id="42" firstId="9" secondId="37"/>
+    <edge id="43" firstId="2" secondId="32"/>
+    <edge id="44" firstId="32" secondId="35"/>
+    <edge id="45" firstId="35" secondId="33"/>
+    <edge id="46" firstId="33" secondId="1"/>
+    <edge id="47" firstId="1" secondId="34"/>
+    <edge id="48" firstId="28" secondId="31"/>
 </graph>

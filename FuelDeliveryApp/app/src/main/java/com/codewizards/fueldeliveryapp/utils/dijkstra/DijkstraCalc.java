@@ -21,6 +21,11 @@ public class DijkstraCalc {
     private Vertex finish;
     private Edge startConnectorEdge;
     private Edge finalConnectorEdge;
+
+    public DijkstraCalc() {
+        logger.setEnabled(false);
+    }
+
     public List<Vertex> getShortestPath(Graph graph, Coordinates startCity, Coordinates finalCity) {
         this.graph = graph;
         reset();

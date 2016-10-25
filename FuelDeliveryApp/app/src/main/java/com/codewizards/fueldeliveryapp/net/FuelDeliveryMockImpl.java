@@ -1,13 +1,11 @@
 package com.codewizards.fueldeliveryapp.net;
 
-import android.location.Location;
-import android.util.Log;
-
 import com.codewizards.fueldeliveryapp.entities.City;
 import com.codewizards.fueldeliveryapp.entities.Coordinates;
 import com.codewizards.fueldeliveryapp.entities.Delivery;
 import com.codewizards.fueldeliveryapp.entities.FuzzyNumber;
 import com.codewizards.fueldeliveryapp.entities.Order;
+import com.codewizards.fueldeliveryapp.utils.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +18,7 @@ import rx.Subscriber;
  * Created by dmikhov on 21.10.2016.
  */
 public class FuelDeliveryMockImpl implements FuelDeliveryApi {
+    Logger logger = Logger.getLogger(this.getClass());
     List<City> cities = new ArrayList<>();
     List<Delivery> deliveries = new ArrayList<>();
     BaseResponse response;
@@ -39,13 +38,6 @@ public class FuelDeliveryMockImpl implements FuelDeliveryApi {
         City city3 = new City(2, "Istanbul", cd3);
         City city4 = new City(3, "New York", cd4);
         City city5 = new City(4, "Nikolaev", cd5);
-        float res[] = new float[2];
-        Location.distanceBetween(cd1.getLat(), cd2.getLon(), -9.093525, 49.522275, res);
-        Log.e("madlog", "dublin dist 11: " + res[0]);
-        Location.distanceBetween(cd1.getLat(), cd2.getLon(), 36.505379, 43.350728, res);
-        Log.e("madlog", "dublin dist 8: " + res[0]);
-        Location.distanceBetween(cd5.getLat(), cd5.getLon(), 36.505379, 43.350728, res);
-        Log.e("madlog", "nik dist 8: " + res[0]);
         FuzzyNumber fn1 = new FuzzyNumber(100, 100, 200);
         FuzzyNumber fn2 = new FuzzyNumber(100, 150, 250);
         FuzzyNumber fn3 = new FuzzyNumber(90, 160, 170);
@@ -63,8 +55,8 @@ public class FuelDeliveryMockImpl implements FuelDeliveryApi {
         orders1.add(o2); // 2
         orders1.add(o5); // 5
         orders2.add(o4);
-        Delivery d1 = new Delivery(0, "Sea delivery 1", orders1);
-        Delivery d2 = new Delivery(1, "Sea delivery 2", orders2);
+        Delivery d1 = new Delivery(0, "Sea delivery 1", 700, orders1);
+        Delivery d2 = new Delivery(1, "Sea delivery 2", 300, orders2);
         deliveries.add(d1);
         deliveries.add(d2);
         cities.add(city1);

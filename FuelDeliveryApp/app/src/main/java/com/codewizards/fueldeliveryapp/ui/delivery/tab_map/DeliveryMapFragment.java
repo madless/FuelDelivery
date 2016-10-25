@@ -13,6 +13,7 @@ import android.view.animation.LinearInterpolator;
 import com.codewizards.fueldeliveryapp.R;
 import com.codewizards.fueldeliveryapp.entities.City;
 import com.codewizards.fueldeliveryapp.entities.Coordinates;
+import com.codewizards.fueldeliveryapp.entities.Delivery;
 import com.codewizards.fueldeliveryapp.entities.Order;
 import com.codewizards.fueldeliveryapp.ui.delivery.BaseTabFragment;
 import com.codewizards.fueldeliveryapp.utils.dijkstra.DijkstraCalc;
@@ -49,7 +50,12 @@ public class DeliveryMapFragment extends BaseTabFragment implements OnMapReadyCa
     private static final int CAMERA_ZOOM = 5;
     private static final int CAMERA_TILT = 0;
     private static final int CAMERA_SPEED = 1000;
-    private static final int START_DELAY = 1500;
+    private static final int START_DELAY = 1000;
+    private static final int SHIP_ANIMATE_SPEED = 1000;
+    private static final int SHIP_STEP_DELAY = 5;
+    private static final int IN_CITY_DELAY = 1000;
+    private static final String SHIP_ROUTE_FORMAT = "%s -> %s";
+    private static final String SHIP_SNIPPET_FORMAT = "Fuel: %s";
 
     private GoogleMap map;
     private int index;
@@ -89,7 +95,7 @@ public class DeliveryMapFragment extends BaseTabFragment implements OnMapReadyCa
                 Order orderTo = orders.get(i + 1);
                 List<Vertex> shortestPath = dijkstraCalc.getShortestPath(seaGraph, orderFrom.getCity().getCoordinates(), orderTo.getCity().getCoordinates());
                 logger.w("shortestPath: " + shortestPath);
-                seaPathes.add(new Path(shortestPath));
+                seaPathes.add(new Path(orderFrom.getCity(), orderTo.getCity(), shortestPath));
             }
             mapFragment.getMapAsync(this);
         } catch (ParserConfigurationException | SAXException | IOException e) {
@@ -112,15 +118,18 @@ public class DeliveryMapFragment extends BaseTabFragment implements OnMapReadyCa
                     markers.add(marker);
                 }
             }
+            map.getUiSettings().setScrollGesturesEnabled(false);
             handler.postDelayed(() -> {
                 City city = firstOrder.getCity();
                 Coordinates location = city.getCoordinates();
                 LatLng coordinates = new LatLng(location.getLat(), location.getLon());
                 trackingMarker = map.addMarker(new MarkerOptions()
                         .position(coordinates)
-                        .title("Ship")
+                        .title(String.format(SHIP_ROUTE_FORMAT, getCurrentPath().getFrom().getName(), getCurrentPath().getTo().getName()))
                         .icon(BitmapDescriptorFactory.fromResource(R.drawable.img_ship_small))
+                        .snippet(String.format(SHIP_SNIPPET_FORMAT, getDelivery().getAmountOfFuel().toString()))
                 );
+                trackingMarker.showInfoWindow();
                 polyline = map.addPolyline(rectOptions);
                 CameraPosition cameraPosition = new CameraPosition.Builder()
                         .target(coordinates)
@@ -135,8 +144,19 @@ public class DeliveryMapFragment extends BaseTabFragment implements OnMapReadyCa
         }
     }
 
-    public List<Vertex> getCurrentPath() {
+    public void updateTrackingMarkerInfo() {
+        logger.i("updateTrackingMarkerInfo(): " + String.format(SHIP_ROUTE_FORMAT, getCurrentPath().getFrom().getName(), getCurrentPath().getTo().getName()));
+        trackingMarker.setTitle(String.format(SHIP_ROUTE_FORMAT, getCurrentPath().getFrom().getName(), getCurrentPath().getTo().getName()));
+        trackingMarker.setSnippet(String.format(SHIP_SNIPPET_FORMAT, getDelivery().getAmountOfFuel().toString()));
+        trackingMarker.showInfoWindow();
+    }
+
+    public List<Vertex> getCurrentPathVertexes() {
         return seaPathes.get(pathIndex).getVertices();
+    }
+
+    public Path getCurrentPath() {
+        return seaPathes.get(pathIndex);
     }
 
     GoogleMap.CancelableCallback simpleAnimationCancelableCallback =
@@ -155,6 +175,10 @@ public class DeliveryMapFragment extends BaseTabFragment implements OnMapReadyCa
         return activity.getDelivery().getOrders();
     }
 
+    public Delivery getDelivery() {
+        return activity.getDelivery();
+    }
+
     private void updatePolyLine(LatLng latLng) {
         List<LatLng> points = polyline.getPoints();
         points.add(latLng);
@@ -162,25 +186,18 @@ public class DeliveryMapFragment extends BaseTabFragment implements OnMapReadyCa
     }
 
     public class PathAnimator implements Runnable {
-        private static final int ANIMATE_SPEEED = 1000;
-        private static final int STEP_DELAY = 15;
-
-        LatLng endLatLng = null;
-        LatLng beginLatLng = null;
+        private LatLng endLatLng = null;
+        private LatLng beginLatLng = null;
         private final Interpolator interpolator = new LinearInterpolator();
-        long start = SystemClock.uptimeMillis();
-
-        public PathAnimator() {
-
-        }
+        private long start = SystemClock.uptimeMillis();
 
         private LatLng getEndLatLng() {
-            Coordinates coordinates = getCurrentPath().get(index + 1).getCoordinates();
+            Coordinates coordinates = getCurrentPathVertexes().get(index + 1).getCoordinates();
             return new LatLng(coordinates.getLat(), coordinates.getLon());
         }
 
         private LatLng getBeginLatLng() {
-            Coordinates coordinates = getCurrentPath().get(index).getCoordinates();
+            Coordinates coordinates = getCurrentPathVertexes().get(index).getCoordinates();
             return new LatLng(coordinates.getLat(), coordinates.getLon());
         }
 
@@ -191,10 +208,10 @@ public class DeliveryMapFragment extends BaseTabFragment implements OnMapReadyCa
         }
 
         public void start() {
-            if(index < getCurrentPath().size() - 1) {
+            if(index < getCurrentPathVertexes().size() - 1) {
                 update();
             }
-            handler.postDelayed(this, STEP_DELAY);
+            handler.postDelayed(this, SHIP_STEP_DELAY);
         }
 
         private void stop() {
@@ -204,7 +221,7 @@ public class DeliveryMapFragment extends BaseTabFragment implements OnMapReadyCa
         @Override
         public void run() {
             long elapsed = SystemClock.uptimeMillis() - start;
-            double t = interpolator.getInterpolation((float)elapsed / ANIMATE_SPEEED);
+            double t = interpolator.getInterpolation((float)elapsed / SHIP_ANIMATE_SPEED);
             double lat = t * endLatLng.latitude + (1-t) * beginLatLng.latitude;
             double lng = t * endLatLng.longitude + (1-t) * beginLatLng.longitude;
             LatLng newPosition = new LatLng(lat, lng);
@@ -214,12 +231,12 @@ public class DeliveryMapFragment extends BaseTabFragment implements OnMapReadyCa
 
             if (t < 1) {
                 // move path
-                handler.postDelayed(this, STEP_DELAY);
+                handler.postDelayed(this, SHIP_STEP_DELAY);
             } else {
                 logger.d("t >= 0, index: " + index + ", markers.size(): " + markers.size());
-                if(index < getCurrentPath().size() - 2) {
+                if(index < getCurrentPathVertexes().size() - 2) {
                     index++;
-                    Coordinates c = getCurrentPath().get(index).getCoordinates();
+                    Coordinates c = getCurrentPathVertexes().get(index).getCoordinates();
                     LatLng location = new LatLng(c.getLat(), c.getLon());
                     CameraPosition cameraPosition =
                             new CameraPosition.Builder()
@@ -236,7 +253,10 @@ public class DeliveryMapFragment extends BaseTabFragment implements OnMapReadyCa
                     if(pathIndex < seaPathes.size() - 1) {
                         pathIndex++;
                         index = 0;
-                        start();
+                        updateTrackingMarkerInfo();
+                        handler.postDelayed(this::start, IN_CITY_DELAY);
+                    } else {
+                        map.getUiSettings().setScrollGesturesEnabled(true);
                     }
                 }
 

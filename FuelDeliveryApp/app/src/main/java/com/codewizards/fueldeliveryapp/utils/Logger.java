@@ -16,7 +16,7 @@ public class Logger {
     private static final String TAG_NAME = "FUEL_APP";
     private static final String CHUNK_FORMAT = "CHUNK %d OF %d:  %s";
     private static final int CONSOLE_LOG_LINE_LENGTH = 4000;
-
+    private boolean isEnabled = true;
     private Class<?> cls;
 
     private Logger() {}
@@ -25,19 +25,38 @@ public class Logger {
         this.cls = cls;
     }
 
+    private Logger(Class<?> cls, boolean isEnabled) {
+        this.cls = cls;
+        this.isEnabled = isEnabled;
+    }
+
     public static Logger getLogger(Class<?> cls) {
         return new Logger(cls);
+    }
+
+    public static Logger getLogger(Class<?> cls, boolean isEnabled) {
+        return new Logger(cls, isEnabled);
+    }
+
+    public boolean isEnabled() {
+        return isEnabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        isEnabled = enabled;
     }
 
     /**********************************************************************************************
      * DEBUG
      *********************************************************************************************/
     public void debug(String message) {
-        debug(cls, message);
+        d(message);
     }
 
     public void d(String message) {
-        debug(cls, message);
+        if(isEnabled) {
+            debug(cls, message);
+        }
     }
 
     public static void debug(Class<?> cls, String message) {
@@ -50,11 +69,13 @@ public class Logger {
      * INFO
      *********************************************************************************************/
     public void info(String message) {
-        info(cls, message);
+        i(message);
     }
 
     public void i(String message) {
-        info(cls, message);
+        if(isEnabled) {
+            info(cls, message);
+        }
     }
 
     public static void info(Class<?> cls, String message) {
@@ -71,7 +92,9 @@ public class Logger {
      * WARN
      *********************************************************************************************/
     public void warn(String message) {
-        warn(cls, message);
+        if(isEnabled) {
+            warn(cls, message);
+        }
     }
 
     public void w(String msg) {
@@ -99,7 +122,9 @@ public class Logger {
         error(msg);
     }
     public void error(String message) {
-        error(cls, message);
+        if(isEnabled) {
+            error(cls, message);
+        }
     }
 
     public static void error(Class<?> cls, String message, Exception e) {

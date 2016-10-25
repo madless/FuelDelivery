@@ -11,7 +11,7 @@ import java.util.List;
  * Created by dmikhov on 24.10.2016.
  */
 public class MapMath {
-    private static Logger logger = Logger.getLogger(MapMath.class);
+    private static Logger logger = Logger.getLogger(MapMath.class, false);
     static double PI_RAD = Math.PI / 180.0;
     final static double R = 6371.16;
 

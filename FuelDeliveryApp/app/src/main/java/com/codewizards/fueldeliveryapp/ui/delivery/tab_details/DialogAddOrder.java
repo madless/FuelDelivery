@@ -22,6 +22,8 @@ import com.codewizards.fueldeliveryapp.repository.RepositoryManager;
 import com.codewizards.fueldeliveryapp.ui.main.dialog.SpinnerAdapter;
 import com.codewizards.fueldeliveryapp.utils.Logger;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import butterknife.Bind;
@@ -45,6 +47,7 @@ public class DialogAddOrder extends DialogFragment implements View.OnClickListen
     private Delivery delivery;
     private UpdateOrdersListener listener;
     Logger logger = Logger.getLogger(this.getClass());
+    List<City> currentCities;
 
     @Nullable
     @Override
@@ -74,13 +77,24 @@ public class DialogAddOrder extends DialogFragment implements View.OnClickListen
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         RepositoryManager.get().getCities().subscribe(cities -> {
+            if(!delivery.getOrders().isEmpty()) {
+                Order lastOrder = delivery.getOrders().get(delivery.getOrders().size() - 1);
+                currentCities = new ArrayList<>();
+                for(City city : cities) {
+                    if(!city.getName().equals(lastOrder.getCity().getName())) {
+                        currentCities.add(city);
+                    }
+                }
+            } else {
+                currentCities = cities;
+            }
             adapter = new SpinnerAdapter(DialogAddOrder.this.getActivity(), R.layout.item_spinner,
-                    R.id.tv_item_spinner, cities);
+                    R.id.tv_item_spinner, currentCities);
             spinnerForCity.setAdapter(adapter);
             spinnerForCity.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                    selectedCity = cities.get(i);
+                    selectedCity = currentCities.get(i);
                 }
 
                 @Override
@@ -135,6 +149,7 @@ public class DialogAddOrder extends DialogFragment implements View.OnClickListen
         int amountOfFuelLeftX0 = -1;
         int amountOfFuelLeftX2 = -1;
         int minOrder = 50;
+        int maxDiff = 20;
         if(delivery.getOrders().isEmpty()) {
             amountOfFuelLeftX1 = delivery.getAmountOfFuel().getX1();
         } else {
@@ -146,8 +161,8 @@ public class DialogAddOrder extends DialogFragment implements View.OnClickListen
         }
 
         int x1 = random.nextInt(amountOfFuelLeftX1 - minOrder) + minOrder;
-        int x0 = random.nextInt(amountOfFuelLeftX0 - x1) + x1;
-        int x2 = random.nextInt(amountOfFuelLeftX2 - x1) + x1;
+        int x0 = random.nextInt(amountOfFuelLeftX1 + maxDiff - x1) + x1;
+        int x2 = random.nextInt(amountOfFuelLeftX1 + 2 * maxDiff - x0) + x0;
         FuzzyNumber fuzzyNumber = new FuzzyNumber(x1, x0, x2);
         logger.d("New fuzzy: " + fuzzyNumber.toString());
         return fuzzyNumber;

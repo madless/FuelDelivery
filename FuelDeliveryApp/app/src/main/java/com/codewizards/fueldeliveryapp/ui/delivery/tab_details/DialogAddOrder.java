@@ -21,6 +21,7 @@ import com.codewizards.fueldeliveryapp.entities.Order;
 import com.codewizards.fueldeliveryapp.repository.RepositoryManager;
 import com.codewizards.fueldeliveryapp.ui.main.dialog.SpinnerAdapter;
 import com.codewizards.fueldeliveryapp.utils.Logger;
+import com.codewizards.fueldeliveryapp.utils.calculator.FuzzyNumberHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -128,7 +129,7 @@ public class DialogAddOrder extends DialogFragment implements View.OnClickListen
             amountOfFuel = new FuzzyNumber(x1, x0, x2);
         }
         Order order = new Order(delivery.getOrders().size(), selectedCity, amountOfFuel);
-        delivery.getOrders().add(order);
+        FuzzyNumberHelper.addOrderToList(delivery, order);
         if(listener != null) {
             listener.updateData();
         }

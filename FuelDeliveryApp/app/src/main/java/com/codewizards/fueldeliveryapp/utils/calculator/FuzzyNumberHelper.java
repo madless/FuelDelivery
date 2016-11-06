@@ -4,7 +4,6 @@ import com.codewizards.fueldeliveryapp.entities.Delivery;
 import com.codewizards.fueldeliveryapp.entities.FuzzyNumber;
 import com.codewizards.fueldeliveryapp.entities.Order;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -28,11 +27,10 @@ public class FuzzyNumberHelper {
 
     public static void addOrderToList(Delivery delivery, Order order) {
         List<Order> orders = delivery.getOrders();
-        if(orders != null && !orders.isEmpty()) {
+        if(!orders.isEmpty()) {
             Order lastOrder = orders.get(orders.size() - 1);
             proccessOrder(order, lastOrder.getAmountOfFuelAfterOrder());
         } else {
-            orders = new ArrayList<>();
             FuzzyNumber amountOfFuel = delivery.getAmountOfFuel();
             proccessOrder(order, amountOfFuel);
         }

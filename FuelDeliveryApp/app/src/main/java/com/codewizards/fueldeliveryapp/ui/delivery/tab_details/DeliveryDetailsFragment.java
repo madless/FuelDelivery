@@ -2,6 +2,7 @@ package com.codewizards.fueldeliveryapp.ui.delivery.tab_details;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -29,6 +30,7 @@ public class DeliveryDetailsFragment extends BaseTabFragment {
     @Bind(R.id.tvAmountOfFuelAtBeginning) TextView tvAmountOfFuelAtBeginning;
     @Bind(R.id.tvAmountOfFuelLeft) TextView tvAmountOfFuelLeft;
     @Bind(R.id.rvOrders) RecyclerView rvOrders;
+    @Bind(R.id.fabAdd) FloatingActionButton fabAdd;
     private OrdersAdapter adapter;
 
     @Nullable
@@ -36,6 +38,13 @@ public class DeliveryDetailsFragment extends BaseTabFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_delivery_details, container, false);
         ButterKnife.bind(this, root);
+        fabAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DialogAddOrder dialogAddOrder = new DialogAddOrder();
+                dialogAddOrder.show(getActivity().getFragmentManager(), "");
+            }
+        });
         return root;
     }
 
@@ -61,7 +70,7 @@ public class DeliveryDetailsFragment extends BaseTabFragment {
             adapter.notifyDataSetChanged();
             tvDeliveryName.setText(delivery.getName());
             tvAmountOfFuelAtBeginning.setText(String.format(getString(R.string.amount_of_fuel_at_beginning), orders.get(0).getAmountOfFuelBeforeOrder().toString()));
-            tvAmountOfFuelLeft.setText(String.format(getString(R.string.amount_of_fuel_at_beginning), orders.get(orders.size() - 1).getAmountOfFuelAfterOrder().toString()));
+            tvAmountOfFuelLeft.setText(String.format(getString(R.string.amount_of_fuel_left), orders.get(orders.size() - 1).getAmountOfFuelAfterOrder().toString()));
         } else {
             logger.w("activity == null");
         }

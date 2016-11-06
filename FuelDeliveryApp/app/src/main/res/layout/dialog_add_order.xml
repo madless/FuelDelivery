@@ -9,28 +9,42 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:textColor="@color/colorAccent"
-        android:text="@string/title_dialog_add_delivery"/>
+        android:text="@string/title_dialog_add_order"/>
+    <CheckBox
+        android:id="@+id/cb_random"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/cb_random"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/tv_amount_of_fuel_for_order"/>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
-        <TextView
+        <EditText
+            android:id="@+id/left_border"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/tv_amount_of_fuel"/>
-        <EditText
             android:layout_weight="1"
-            android:layout_width="0dp"
+            android:ems="4"
+            android:inputType="number"/>
+        <EditText
+            android:id="@+id/max_value"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:inputType="number"
-            android:text="@string/et_amount_of_fuel"
-            android:id="@+id/et_amount_of_fuel"
-            android:hint=""/>
+            android:layout_weight="1"
+            android:ems="4"
+            android:inputType="number"/>
+        <EditText
+            android:id="@+id/right_border"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="4"
+            android:inputType="number"/>
     </LinearLayout>
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/tv_select_city"/>
     <Spinner
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

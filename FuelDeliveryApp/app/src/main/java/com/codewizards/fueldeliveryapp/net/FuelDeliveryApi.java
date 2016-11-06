@@ -16,5 +16,5 @@ import rx.Observable;
 public interface FuelDeliveryApi {
     @GET("deliveries") Observable<List<Delivery>> getDeliveries();
     @GET("cities") Observable<List<City>> getCities();
-    @POST("deliveries/add") Observable<BaseResponse> addDelivery(@Body Delivery delivery);
+    @POST("deliveries/add") Observable<List<Delivery>> addDelivery(@Body Delivery delivery);
 }

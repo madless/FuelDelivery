@@ -31,7 +31,7 @@ public class DeliveriesAdapter extends RecyclerView.Adapter<DeliveriesAdapter.Ho
     public void onBindViewHolder(Holder holder, int position) {
         if(deliveries != null && deliveries.size() > position && deliveries.get(position) != null) {
             Delivery delivery = deliveries.get(position);
-            int ordersCount = delivery.getOrders().size();
+            int ordersCount = delivery.getOrders() != null ? delivery.getOrders().size() : 0;
             holder.tvDeliveryName.setText(delivery.getName());
             holder.tvOrderCount.setText(String.valueOf(ordersCount));
             holder.root.setTag(delivery);

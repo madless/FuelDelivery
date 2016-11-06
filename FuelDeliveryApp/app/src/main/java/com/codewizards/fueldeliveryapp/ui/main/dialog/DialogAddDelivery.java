@@ -3,12 +3,10 @@ package com.codewizards.fueldeliveryapp.ui.main.dialog;
 import android.app.DialogFragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -16,11 +14,11 @@ import android.widget.Spinner;
 import com.codewizards.fueldeliveryapp.R;
 import com.codewizards.fueldeliveryapp.entities.City;
 import com.codewizards.fueldeliveryapp.entities.Delivery;
+import com.codewizards.fueldeliveryapp.entities.FuzzyNumber;
 import com.codewizards.fueldeliveryapp.repository.RepositoryManager;
 
-import java.util.List;
-
-import rx.functions.Action1;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by Интернет on 05.11.2016.
@@ -82,13 +80,18 @@ public class DialogAddDelivery extends DialogFragment implements View.OnClickLis
     }
 
     private void saveDelivery() {
-        int id = 0;
         if(etAmountOfFuel.getText().toString().equals("")) {
             etAmountOfFuel.setError("Required");
             return;
         }
         int amountOfFuel = Integer.valueOf(etAmountOfFuel.getText().toString());
-        Delivery delivery = new Delivery(id, "Sea delivery " + id, selectedCity, amountOfFuel);
-        RepositoryManager.get().addDelivery(delivery).subscribe();
+        FuzzyNumber amountOfFuelFuzzy = new FuzzyNumber(amountOfFuel);
+        Delivery delivery = new Delivery(selectedCity, amountOfFuelFuzzy);
+        RepositoryManager.get().addDelivery(delivery)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+        .subscribe(deliveries -> {
+            RepositoryManager.get().updateDeliveries(deliveries);
+        });
     }
 }

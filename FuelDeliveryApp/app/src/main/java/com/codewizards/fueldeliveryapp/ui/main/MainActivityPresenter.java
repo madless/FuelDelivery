@@ -13,7 +13,7 @@ import rx.schedulers.Schedulers;
 /**
  * Created by dmikhov on 21.10.2016.
  */
-public class MainActivityPresenter extends BasePresenter {
+public class MainActivityPresenter extends BasePresenter implements OnDeliveriesUpdatedListener {
     private MainActivity view;
     private List<Delivery> deliveries;
     private boolean isDataFetched;
@@ -29,6 +29,7 @@ public class MainActivityPresenter extends BasePresenter {
             logger.error("view == null, attach view first!");
         }
         if(!isDataFetched) {
+            RepositoryManager.get().addOnDeliveriesUpdatedListener(this);
             view.onLoadingStarted();
             fetchData();
         } else {
@@ -79,9 +80,14 @@ public class MainActivityPresenter extends BasePresenter {
     public void onTotalDestroy() {
         logger.d("onTotalDestroy()");
         if(subscription != null && !subscription.isUnsubscribed()) {
+            RepositoryManager.get().removeOnDeliveriesUpdatedListener(this);
             subscription.unsubscribe();
         }
     }
 
-
+    @Override
+    public void onDeliveriesUpdated(List<Delivery> deliveries) {
+        logger.d("onDeliveriesUpdated: " + deliveries);
+        onDataFetchedSuccessfully(deliveries);
+    }
 }

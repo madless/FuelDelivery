@@ -3,7 +3,6 @@ package com.codewizards.fueldeliveryapp.repository;
 import com.codewizards.fueldeliveryapp.entities.City;
 import com.codewizards.fueldeliveryapp.entities.Delivery;
 import com.codewizards.fueldeliveryapp.entities.Order;
-import com.codewizards.fueldeliveryapp.net.BaseResponse;
 
 import java.util.List;
 
@@ -16,5 +15,5 @@ public interface IRepository {
     Observable<List<Delivery>> getDeliveries();
     Observable<List<City>> getCities();
     Observable<List<Order>> getOrdersByDeliveryId(int deliveryId);
-    Observable<BaseResponse> addDelivery(Delivery delivery);
+    Observable<List<Delivery>> addDelivery(Delivery delivery);
 }

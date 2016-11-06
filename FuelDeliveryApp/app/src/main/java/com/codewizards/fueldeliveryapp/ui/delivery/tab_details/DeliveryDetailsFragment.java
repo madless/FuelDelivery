@@ -66,11 +66,16 @@ public class DeliveryDetailsFragment extends BaseTabFragment {
             Delivery delivery = activity.getDelivery();
             FuzzyNumberHelper.calculateListOfOrders(delivery);
             List<Order> orders = delivery.getOrders();
-            adapter.setData(orders);
-            adapter.notifyDataSetChanged();
+            if(orders != null && !orders.isEmpty()) {
+                adapter.setData(orders);
+                adapter.notifyDataSetChanged();
+                tvAmountOfFuelAtBeginning.setText(String.format(getString(R.string.amount_of_fuel_at_beginning), orders.get(0).getAmountOfFuelBeforeOrder().toString()));
+                tvAmountOfFuelLeft.setText(String.format(getString(R.string.amount_of_fuel_left), orders.get(orders.size() - 1).getAmountOfFuelAfterOrder().toString()));
+            } else {
+                tvAmountOfFuelAtBeginning.setText(String.format(getString(R.string.amount_of_fuel_at_beginning), delivery.getAmountOfFuel().toString()));
+                tvAmountOfFuelLeft.setText(String.format(getString(R.string.amount_of_fuel_left), delivery.getAmountOfFuel().toString()));
+            }
             tvDeliveryName.setText(delivery.getName());
-            tvAmountOfFuelAtBeginning.setText(String.format(getString(R.string.amount_of_fuel_at_beginning), orders.get(0).getAmountOfFuelBeforeOrder().toString()));
-            tvAmountOfFuelLeft.setText(String.format(getString(R.string.amount_of_fuel_left), orders.get(orders.size() - 1).getAmountOfFuelAfterOrder().toString()));
         } else {
             logger.w("activity == null");
         }

@@ -3,7 +3,6 @@ package com.codewizards.fueldeliveryapp.repository;
 import com.codewizards.fueldeliveryapp.entities.City;
 import com.codewizards.fueldeliveryapp.entities.Delivery;
 import com.codewizards.fueldeliveryapp.entities.Order;
-import com.codewizards.fueldeliveryapp.net.BaseResponse;
 import com.codewizards.fueldeliveryapp.utils.Logger;
 
 import java.util.List;
@@ -59,7 +58,7 @@ public class LocalRepository implements IRepository {
     }
 
     @Override
-    public Observable<BaseResponse> addDelivery(Delivery delivery) {
+    public Observable<List<Delivery>> addDelivery(Delivery delivery) {
         throw new RuntimeException("Not implemented!");
     }
 }

@@ -36,6 +36,12 @@ public class Delivery {
         this.orders = new ArrayList<>();
     }
 
+    public Delivery(City sourceCity, FuzzyNumber amountOfFuel) {
+        this.id = -1;
+        this.sourceCity = sourceCity;
+        this.amountOfFuel = amountOfFuel;
+    }
+
     public int getId() {
         return id;
     }
@@ -81,7 +87,7 @@ public class Delivery {
         return "Delivery{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", orders=" + orders +
+//                ", orders=" + orders +
                 '}';
     }
 }

@@ -70,8 +70,8 @@ public class FuelDeliveryMockImpl implements FuelDeliveryApi {
         orders1.add(o2); // Odessa
         orders1.add(o5); // Nikolaev
         orders2.add(o4);
-        Delivery d1 = new Delivery(0, "Sea delivery 1", city1, 700, orders1);
-        Delivery d2 = new Delivery(1, "Sea delivery 2", city1, 300, orders2);
+        Delivery d1 = new Delivery(0, "Sea delivery 0", city1, 700, orders1);
+        Delivery d2 = new Delivery(1, "Sea delivery 1", city1, 300, orders2);
         deliveries.add(d1);
         deliveries.add(d2);
         cities.add(city1);
@@ -118,17 +118,17 @@ public class FuelDeliveryMockImpl implements FuelDeliveryApi {
     }
 
     @Override
-    public Observable<BaseResponse> addDelivery(@Body Delivery delivery) {
-        return Observable.create(new Observable.OnSubscribe<BaseResponse>() {
+    public Observable<List<Delivery>> addDelivery(@Body Delivery delivery) {
+        return Observable.create(new Observable.OnSubscribe<List<Delivery>>() {
             @Override
-            public void call(Subscriber<? super BaseResponse> subscriber) {
+            public void call(Subscriber<? super List<Delivery>> subscriber) {
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
                 deliveries.add(delivery);
-                subscriber.onNext(response);
+                subscriber.onNext(deliveries);
                 subscriber.onCompleted();
             }
         });

@@ -14,6 +14,12 @@ public class FuzzyNumber {
         this.x2 = x2;
     }
 
+    public FuzzyNumber(int x) { // const
+        this.x1 = x;
+        this.x0 = x;
+        this.x2 = x;
+    }
+
     public int getX1() {
         return x1;
     }

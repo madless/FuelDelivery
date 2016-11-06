@@ -90,11 +90,11 @@ public class FuelDeliveryMockImpl implements FuelDeliveryApi {
         return Observable.create(new Observable.OnSubscribe<List<Delivery>>() {
             @Override
             public void call(Subscriber<? super List<Delivery>> subscriber) {
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+//                try {
+//                    Thread.sleep(1000);
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
                 subscriber.onNext(deliveries);
                 subscriber.onCompleted();
             }
@@ -106,11 +106,11 @@ public class FuelDeliveryMockImpl implements FuelDeliveryApi {
         return Observable.create(new Observable.OnSubscribe<List<City>>() {
             @Override
             public void call(Subscriber<? super List<City>> subscriber) {
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+//                try {
+//                    Thread.sleep(1000);
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
                 subscriber.onNext(cities);
                 subscriber.onCompleted();
             }
@@ -122,11 +122,11 @@ public class FuelDeliveryMockImpl implements FuelDeliveryApi {
         return Observable.create(new Observable.OnSubscribe<List<Delivery>>() {
             @Override
             public void call(Subscriber<? super List<Delivery>> subscriber) {
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+//                try {
+//                    //Thread.sleep(1000);
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
                 deliveries.add(delivery);
                 subscriber.onNext(deliveries);
                 subscriber.onCompleted();

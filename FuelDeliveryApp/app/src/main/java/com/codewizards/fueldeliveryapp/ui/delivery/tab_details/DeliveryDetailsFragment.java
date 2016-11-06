@@ -24,7 +24,7 @@ import butterknife.ButterKnife;
 /**
  * Created by dmikhov on 21.10.2016.
  */
-public class DeliveryDetailsFragment extends BaseTabFragment {
+public class DeliveryDetailsFragment extends BaseTabFragment implements UpdateOrdersListener {
 
     @Bind(R.id.tvDeliveryName) TextView tvDeliveryName;
     @Bind(R.id.tvAmountOfFuelAtBeginning) TextView tvAmountOfFuelAtBeginning;
@@ -38,12 +38,11 @@ public class DeliveryDetailsFragment extends BaseTabFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_delivery_details, container, false);
         ButterKnife.bind(this, root);
-        fabAdd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                DialogAddOrder dialogAddOrder = new DialogAddOrder();
-                dialogAddOrder.show(getActivity().getFragmentManager(), "");
-            }
+        fabAdd.setOnClickListener(view -> {
+            DialogAddOrder dialogAddOrder = new DialogAddOrder();
+            dialogAddOrder.attachDelivery(activity.getDelivery());
+            dialogAddOrder.setListener(DeliveryDetailsFragment.this);
+            dialogAddOrder.show(getActivity().getFragmentManager(), "");
         });
         return root;
     }
@@ -79,5 +78,10 @@ public class DeliveryDetailsFragment extends BaseTabFragment {
         } else {
             logger.w("activity == null");
         }
+    }
+
+    @Override
+    public void updateData() {
+        initData();
     }
 }

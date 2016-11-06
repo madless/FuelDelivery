@@ -11,7 +11,7 @@ public class Delivery {
     private String name;
     private City sourceCity;
     private FuzzyNumber amountOfFuel; // amount of fuel on a ship
-    private List<Order> orders;
+    private List<Order> orders = new ArrayList<>();
 
     public Delivery(int id, String name, City sourceCity, int amountOfFuel, List<Order> orders) {
         this.id = id;

@@ -3,6 +3,7 @@ package com.codewizards.fueldeliveryapp.ui.delivery.tab_details;
 import android.app.DialogFragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,9 +16,15 @@ import android.widget.Spinner;
 
 import com.codewizards.fueldeliveryapp.R;
 import com.codewizards.fueldeliveryapp.entities.City;
+import com.codewizards.fueldeliveryapp.entities.Delivery;
+import com.codewizards.fueldeliveryapp.entities.FuzzyNumber;
+import com.codewizards.fueldeliveryapp.entities.Order;
 import com.codewizards.fueldeliveryapp.repository.RepositoryManager;
 import com.codewizards.fueldeliveryapp.ui.main.dialog.DialogAddDelivery;
 import com.codewizards.fueldeliveryapp.ui.main.dialog.SpinnerAdapter;
+import com.codewizards.fueldeliveryapp.utils.Logger;
+
+import java.util.Random;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -37,6 +44,9 @@ public class DialogAddOrder extends DialogFragment implements View.OnClickListen
     private City selectedCity;
     private SpinnerAdapter adapter;
     private boolean isRandom;
+    private Delivery delivery;
+    private UpdateOrdersListener listener;
+    Logger logger = Logger.getLogger(this.getClass());
 
     @Nullable
     @Override
@@ -96,6 +106,51 @@ public class DialogAddOrder extends DialogFragment implements View.OnClickListen
     }
 
     private void saveOrder() {
+        FuzzyNumber amountOfFuel = null;
+        if(isRandom) {
+            amountOfFuel = getRandomFuzzyNumber();
+        } else {
+            int x1 = Integer.valueOf(etLeftBorder.getText().toString());
+            int x0 = Integer.valueOf(etMaxValue.getText().toString());
+            int x2 = Integer.valueOf(etRightBorder.getText().toString());
+            amountOfFuel = new FuzzyNumber(x1, x0, x2);
+        }
+        Order order = new Order(delivery.getOrders().size(), selectedCity, amountOfFuel);
+        if(listener != null) {
+            listener.updateData();
+        }
+        dismiss();
+    }
 
+    public void attachDelivery(Delivery delivery) {
+        this.delivery = delivery;
+    }
+
+    public void setListener(UpdateOrdersListener listener) {
+        this.listener = listener;
+    }
+
+    private FuzzyNumber getRandomFuzzyNumber() {
+        Random random = new Random();
+        int amountOfFuelLeftX1 = -1;
+        int amountOfFuelLeftX0 = -1;
+        int amountOfFuelLeftX2 = -1;
+        int minOrder = 50;
+        if(delivery.getOrders().isEmpty()) {
+            amountOfFuelLeftX1 = delivery.getAmountOfFuel().getX1();
+        } else {
+            Order lastOrder = delivery.getOrders().get(delivery.getOrders().size());
+            amountOfFuelLeftX1 = lastOrder.getAmountOfFuelAfterOrder().getX1();
+            amountOfFuelLeftX0 = lastOrder.getAmountOfFuelAfterOrder().getX0();
+            amountOfFuelLeftX2 = lastOrder.getAmountOfFuelAfterOrder().getX2();
+            logger.d("LastOrder: " + lastOrder.getAmountOfFuelAfterOrder().toString());
+        }
+
+        int x1 = random.nextInt(amountOfFuelLeftX1 - minOrder) + minOrder;
+        int x0 = random.nextInt(amountOfFuelLeftX0 - x1) + x1;
+        int x2 = random.nextInt(amountOfFuelLeftX2 - x1) + x1;
+        FuzzyNumber fuzzyNumber = new FuzzyNumber(x1, x0, x2);
+        logger.d("New fuzzy: " + fuzzyNumber.toString());
+        return fuzzyNumber;
     }
 }

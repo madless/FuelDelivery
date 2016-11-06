@@ -13,6 +13,7 @@ import com.codewizards.fueldeliveryapp.R;
 import com.codewizards.fueldeliveryapp.entities.Delivery;
 import com.codewizards.fueldeliveryapp.entities.Order;
 import com.codewizards.fueldeliveryapp.ui.delivery.BaseTabFragment;
+import com.codewizards.fueldeliveryapp.utils.calculator.FuzzyNumberHelper;
 
 import java.util.List;
 
@@ -25,6 +26,8 @@ import butterknife.ButterKnife;
 public class DeliveryDetailsFragment extends BaseTabFragment {
 
     @Bind(R.id.tvDeliveryName) TextView tvDeliveryName;
+    @Bind(R.id.tvAmountOfFuelAtBeginning) TextView tvAmountOfFuelAtBeginning;
+    @Bind(R.id.tvAmountOfFuelLeft) TextView tvAmountOfFuelLeft;
     @Bind(R.id.rvOrders) RecyclerView rvOrders;
     private OrdersAdapter adapter;
 
@@ -52,10 +55,13 @@ public class DeliveryDetailsFragment extends BaseTabFragment {
     public void initData() {
         if(activity != null) {
             Delivery delivery = activity.getDelivery();
+            FuzzyNumberHelper.calculateListOfOrders(delivery);
             List<Order> orders = delivery.getOrders();
             adapter.setData(orders);
             adapter.notifyDataSetChanged();
             tvDeliveryName.setText(delivery.getName());
+            tvAmountOfFuelAtBeginning.setText(String.format(getString(R.string.amount_of_fuel_at_beginning), orders.get(0).getAmountOfFuelBeforeOrder().toString()));
+            tvAmountOfFuelLeft.setText(String.format(getString(R.string.amount_of_fuel_at_beginning), orders.get(orders.size() - 1).getAmountOfFuelAfterOrder().toString()));
         } else {
             logger.w("activity == null");
         }

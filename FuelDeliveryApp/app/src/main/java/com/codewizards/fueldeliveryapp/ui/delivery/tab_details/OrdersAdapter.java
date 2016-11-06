@@ -1,7 +1,6 @@
 package com.codewizards.fueldeliveryapp.ui.delivery.tab_details;
 
 import android.content.Context;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -51,9 +50,7 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.Holder> {
                 holder.tvFuelBeforeOrder.setText("No data!");
             }
             if(!FuzzyNumberHelper.isFuzzyValid(order.getAmountOfFuelAfterOrder())) {
-                holder.tvFuelBeforeOrder.setTextColor(ContextCompat.getColor(context, R.color.colorRed));
-                holder.tvCityName.setTextColor(ContextCompat.getColor(context, R.color.colorRed));
-                holder.tvFuzzyNumber.setTextColor(ContextCompat.getColor(context, R.color.colorRed));
+                holder.tvCityName.setText(order.getCity().getName() + " (invalid)");
             }
         }
     }

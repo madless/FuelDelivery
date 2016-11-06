@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.codewizards.fueldeliveryapp.R;
 import com.codewizards.fueldeliveryapp.entities.Delivery;
+import com.codewizards.fueldeliveryapp.entities.FuzzyNumber;
 import com.codewizards.fueldeliveryapp.entities.Order;
 import com.codewizards.fueldeliveryapp.ui.delivery.BaseTabFragment;
 import com.codewizards.fueldeliveryapp.utils.calculator.FuzzyNumberHelper;
@@ -73,7 +74,12 @@ public class DeliveryDetailsFragment extends BaseTabFragment implements UpdateOr
                 adapter.setData(orders);
                 adapter.notifyDataSetChanged();
                 tvAmountOfFuelAtBeginning.setText(String.format(getString(R.string.amount_of_fuel_at_beginning), orders.get(0).getAmountOfFuelBeforeOrder().toString()));
-                tvAmountOfFuelLeft.setText(String.format(getString(R.string.amount_of_fuel_left), orders.get(orders.size() - 1).getAmountOfFuelAfterOrder().toString()));
+                FuzzyNumber lastFuzzyNumber = orders.get(orders.size() - 1).getAmountOfFuelAfterOrder();
+                if(FuzzyNumberHelper.isFuzzyValid(lastFuzzyNumber)) {
+                    tvAmountOfFuelLeft.setText(String.format(getString(R.string.amount_of_fuel_left), orders.get(orders.size() - 1).getAmountOfFuelAfterOrder().toString()));
+                } else {
+                    tvAmountOfFuelLeft.setText(String.format(getString(R.string.amount_of_fuel_left), orders.get(orders.size() - 1).getAmountOfFuelBeforeOrder().toString()));
+                }
             } else {
                 tvAmountOfFuelAtBeginning.setText(String.format(getString(R.string.amount_of_fuel_at_beginning), delivery.getAmountOfFuel().toString()));
                 tvAmountOfFuelLeft.setText(String.format(getString(R.string.amount_of_fuel_left), delivery.getAmountOfFuel().toString()));

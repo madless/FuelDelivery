@@ -3,7 +3,6 @@ package com.codewizards.fueldeliveryapp.ui.delivery.tab_details;
 import android.app.DialogFragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +19,6 @@ import com.codewizards.fueldeliveryapp.entities.Delivery;
 import com.codewizards.fueldeliveryapp.entities.FuzzyNumber;
 import com.codewizards.fueldeliveryapp.entities.Order;
 import com.codewizards.fueldeliveryapp.repository.RepositoryManager;
-import com.codewizards.fueldeliveryapp.ui.main.dialog.DialogAddDelivery;
 import com.codewizards.fueldeliveryapp.ui.main.dialog.SpinnerAdapter;
 import com.codewizards.fueldeliveryapp.utils.Logger;
 
@@ -116,6 +114,7 @@ public class DialogAddOrder extends DialogFragment implements View.OnClickListen
             amountOfFuel = new FuzzyNumber(x1, x0, x2);
         }
         Order order = new Order(delivery.getOrders().size(), selectedCity, amountOfFuel);
+        delivery.getOrders().add(order);
         if(listener != null) {
             listener.updateData();
         }
@@ -139,7 +138,7 @@ public class DialogAddOrder extends DialogFragment implements View.OnClickListen
         if(delivery.getOrders().isEmpty()) {
             amountOfFuelLeftX1 = delivery.getAmountOfFuel().getX1();
         } else {
-            Order lastOrder = delivery.getOrders().get(delivery.getOrders().size());
+            Order lastOrder = delivery.getOrders().get(delivery.getOrders().size() - 1);
             amountOfFuelLeftX1 = lastOrder.getAmountOfFuelAfterOrder().getX1();
             amountOfFuelLeftX0 = lastOrder.getAmountOfFuelAfterOrder().getX0();
             amountOfFuelLeftX2 = lastOrder.getAmountOfFuelAfterOrder().getX2();

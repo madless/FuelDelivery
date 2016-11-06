@@ -41,6 +41,11 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.Holder> {
             if(city != null) {
                 holder.tvCityName.setText(order.getCity().getName());
             }
+            if(order.getAmountOfFuelBeforeOrder() != null) {
+                holder.tvFuelBeforeOrder.setText(order.getAmountOfFuelBeforeOrder().toString());
+            } else {
+                holder.tvFuelBeforeOrder.setText("No data!");
+            }
         }
     }
 
@@ -62,6 +67,7 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.Holder> {
     class Holder extends RecyclerView.ViewHolder {
         @Bind(R.id.tvCityName) TextView tvCityName;
         @Bind(R.id.tvFuzzyNumber) TextView tvFuzzyNumber;
+        @Bind(R.id.tvFuelBeforeOrder) TextView tvFuelBeforeOrder;
         public Holder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);

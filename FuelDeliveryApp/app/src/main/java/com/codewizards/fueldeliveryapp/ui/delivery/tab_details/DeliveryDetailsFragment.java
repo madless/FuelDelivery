@@ -14,6 +14,7 @@ import com.codewizards.fueldeliveryapp.R;
 import com.codewizards.fueldeliveryapp.entities.Delivery;
 import com.codewizards.fueldeliveryapp.entities.FuzzyNumber;
 import com.codewizards.fueldeliveryapp.entities.Order;
+import com.codewizards.fueldeliveryapp.ui.delivery.AddOrderListener;
 import com.codewizards.fueldeliveryapp.ui.delivery.BaseTabFragment;
 import com.codewizards.fueldeliveryapp.utils.calculator.FuzzyNumberHelper;
 
@@ -33,6 +34,7 @@ public class DeliveryDetailsFragment extends BaseTabFragment implements UpdateOr
     @Bind(R.id.rvOrders) RecyclerView rvOrders;
     @Bind(R.id.fabAdd) FloatingActionButton fabAdd;
     private OrdersAdapter adapter;
+    private AddOrderListener listener;
 
     @Nullable
     @Override
@@ -95,5 +97,14 @@ public class DeliveryDetailsFragment extends BaseTabFragment implements UpdateOr
     @Override
     public void updateData() {
         initData();
+        listener.processOrderAdding();
+    }
+
+    public AddOrderListener getListener() {
+        return listener;
+    }
+
+    public void setListener(AddOrderListener listener) {
+        this.listener = listener;
     }
 }

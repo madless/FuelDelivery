@@ -56,6 +56,7 @@ public class DeliveryActivity extends BaseActivity {
         logger.d("create fragments");
         BaseTabFragment fragmentDetails = new DeliveryDetailsFragment();
         BaseTabFragment fragmentGraph = new DeliveryGraphFragment();
+        ((DeliveryDetailsFragment)fragmentDetails).setListener((AddOrderListener) fragmentGraph);
         BaseTabFragment fragmentMap = new DeliveryMapFragment();
         fragments.clear();
         fragments.add(fragmentDetails);

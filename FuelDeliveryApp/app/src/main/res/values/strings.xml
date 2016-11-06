@@ -12,4 +12,6 @@
     <string name="amount_of_fuel_at_beginning">Fuel: %s</string>
     <string name="cb_random">Random</string>
     <string name="tv_amount_of_fuel_for_order">Input amount of fuel: </string>
+    <string name="next">Next</string>
+    <string name="prev">Previous</string>
 </resources>

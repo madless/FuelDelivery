@@ -123,10 +123,15 @@ public class DialogAddOrder extends DialogFragment implements View.OnClickListen
         if(isRandom) {
             amountOfFuel = getRandomFuzzyNumber();
         } else {
-            int x1 = Integer.valueOf(etLeftBorder.getText().toString());
-            int x0 = Integer.valueOf(etMaxValue.getText().toString());
-            int x2 = Integer.valueOf(etRightBorder.getText().toString());
-            amountOfFuel = new FuzzyNumber(x1, x0, x2);
+            if(isEditTextHasValue(etLeftBorder) && isEditTextHasValue(etMaxValue) &&
+                    isEditTextHasValue(etRightBorder)) {
+                int x1 = Integer.valueOf(etLeftBorder.getText().toString());
+                int x0 = Integer.valueOf(etMaxValue.getText().toString());
+                int x2 = Integer.valueOf(etRightBorder.getText().toString());
+                amountOfFuel = new FuzzyNumber(x1, x0, x2);
+            } else {
+                return;
+            }
         }
         Order order = new Order(delivery.getOrders().size(), selectedCity, amountOfFuel);
         FuzzyNumberHelper.addOrderToList(delivery, order);
@@ -134,6 +139,13 @@ public class DialogAddOrder extends DialogFragment implements View.OnClickListen
             listener.updateData();
         }
         dismiss();
+    }
+
+    private boolean isEditTextHasValue(EditText et) {
+        if(et.getText().toString().equals("")) {
+            et.setError("Required");
+        }
+        return !et.getText().toString().equals("");
     }
 
     public void attachDelivery(Delivery delivery) {

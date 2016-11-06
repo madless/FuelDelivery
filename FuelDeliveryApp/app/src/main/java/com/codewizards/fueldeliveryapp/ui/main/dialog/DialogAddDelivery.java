@@ -93,5 +93,6 @@ public class DialogAddDelivery extends DialogFragment implements View.OnClickLis
         .subscribe(deliveries -> {
             RepositoryManager.get().updateDeliveries(deliveries);
         });
+        dismiss();
     }
 }

@@ -1,5 +1,7 @@
 package com.codewizards.fueldeliveryapp.ui.delivery.tab_details;
 
+import android.content.Context;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +12,7 @@ import com.codewizards.fueldeliveryapp.R;
 import com.codewizards.fueldeliveryapp.entities.City;
 import com.codewizards.fueldeliveryapp.entities.FuzzyNumber;
 import com.codewizards.fueldeliveryapp.entities.Order;
+import com.codewizards.fueldeliveryapp.utils.calculator.FuzzyNumberHelper;
 
 import java.util.List;
 
@@ -31,6 +34,7 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.Holder> {
 
     @Override
     public void onBindViewHolder(Holder holder, int position) {
+        Context context = holder.tvCityName.getContext();
         if(orders != null && orders.size() > position && orders.get(position) != null) {
             Order order = orders.get(position);
             FuzzyNumber fuel = order.getAmountOfFuel();
@@ -45,6 +49,11 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.Holder> {
                 holder.tvFuelBeforeOrder.setText(order.getAmountOfFuelBeforeOrder().toString());
             } else {
                 holder.tvFuelBeforeOrder.setText("No data!");
+            }
+            if(!FuzzyNumberHelper.isFuzzyValid(order.getAmountOfFuelAfterOrder())) {
+                holder.tvFuelBeforeOrder.setTextColor(ContextCompat.getColor(context, R.color.colorRed));
+                holder.tvCityName.setTextColor(ContextCompat.getColor(context, R.color.colorRed));
+                holder.tvFuzzyNumber.setTextColor(ContextCompat.getColor(context, R.color.colorRed));
             }
         }
     }

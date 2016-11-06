@@ -17,6 +17,7 @@ public class DeliveryGraphFragment extends BaseTabFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_delivery_graph, container, false);
+
         return root;
     }
 

@@ -7,11 +7,29 @@
         android:id="@+id/tvDeliveryName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Details"/>
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Details" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Amount of fuel at the beginning:"
+        android:id="@+id/tvAmountOfFuelAtBeginning"
+        android:layout_marginBottom="@dimen/dimen_15" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rvOrders"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Amount of fuel left: "
+        android:id="@+id/tvAmountOfFuelLeft"
+        android:layout_gravity="left|center_horizontal"
+        android:layout_marginTop="@dimen/dimen_20" />
 
 </LinearLayout>

@@ -7,4 +7,6 @@
     <string name="cancel">Cancel</string>
     <string name="save">Save</string>
     <string name="titiel_dialog_add_delivery">Creating new delivery</string>
+    <string name="amount_of_fuel_left">Amount of fuel left: %s</string>
+    <string name="amount_of_fuel_at_beginning">Amount of fuel at the beginning: %s</string>
 </resources>

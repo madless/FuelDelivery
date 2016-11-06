@@ -65,6 +65,10 @@ public class DeliveryDetailsFragment extends BaseTabFragment implements UpdateOr
             Delivery delivery = activity.getDelivery();
             FuzzyNumberHelper.calculateListOfOrders(delivery);
             List<Order> orders = delivery.getOrders();
+            Order lastOrder = orders.get(orders.size() - 1);
+            if(!FuzzyNumberHelper.isFuzzyValid(lastOrder.getAmountOfFuelAfterOrder())) {
+                fabAdd.setVisibility(View.GONE);
+            }
             if(orders != null && !orders.isEmpty()) {
                 adapter.setData(orders);
                 adapter.notifyDataSetChanged();

@@ -1,6 +1,7 @@
 package com.codewizards.fueldeliveryapp.ui.main;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,6 +14,7 @@ import android.widget.Toast;
 import com.codewizards.fueldeliveryapp.R;
 import com.codewizards.fueldeliveryapp.entities.Delivery;
 import com.codewizards.fueldeliveryapp.ui.abs.BaseActivity;
+import com.codewizards.fueldeliveryapp.ui.main.dialog.DialogAddDelivery;
 import com.codewizards.fueldeliveryapp.ui.mvp.PresentersCache;
 import com.codewizards.fueldeliveryapp.ui.mvp.PresentersFactory;
 import com.codewizards.fueldeliveryapp.utils.Const;
@@ -56,7 +58,13 @@ public class MainActivity extends BaseActivity {
         adapter.setOnDeliveryClickListener(delivery -> {
             IntentHelper.openDeliveryActivity(this, delivery.getId());
         });
-        fabAdd.setOnClickListener(view -> Toast.makeText(MainActivity.this, "Not implemented", Toast.LENGTH_SHORT).show());
+        fabAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DialogAddDelivery dialogAddDelivery = new DialogAddDelivery();
+                dialogAddDelivery.show(getFragmentManager(), "");
+            }
+        });
         swipeRefresh.setOnRefreshListener(() -> {
             swipeRefresh.setRefreshing(true);
             presenter.updateData();

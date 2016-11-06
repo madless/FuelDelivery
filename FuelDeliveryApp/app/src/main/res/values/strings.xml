@@ -1,4 +1,9 @@
 <resources>
     <string name="app_name">FuelDeliveryApp</string>
     <string name="title_activity_maps">Map</string>
+    <string name="tv_amount_of_fuel">Input amount of fuel: </string>
+    <string name="et_amount_of_fuel">500</string>
+    <string name="tv_select_city">Select source city</string>
+    <string name="cancel">Cancel</string>
+    <string name="save">Save</string>
 </resources>

@@ -149,6 +149,7 @@ public class DialogAddOrder extends DialogFragment implements View.OnClickListen
         int amountOfFuelLeftX0 = -1;
         int amountOfFuelLeftX2 = -1;
         int minOrder = 50;
+        int maxOrder = 100;
         int maxDiff = 20;
         if(delivery.getOrders().isEmpty()) {
             amountOfFuelLeftX1 = delivery.getAmountOfFuel().getX1();
@@ -160,9 +161,9 @@ public class DialogAddOrder extends DialogFragment implements View.OnClickListen
             logger.d("LastOrder: " + lastOrder.getAmountOfFuelAfterOrder().toString());
         }
 
-        int x1 = random.nextInt(amountOfFuelLeftX1 - minOrder) + minOrder;
-        int x0 = random.nextInt(amountOfFuelLeftX1 + maxDiff - x1) + x1;
-        int x2 = random.nextInt(amountOfFuelLeftX1 + 2 * maxDiff - x0) + x0;
+        int x1 = random.nextInt(maxOrder - minOrder) + minOrder;
+        int x0 = random.nextInt(maxOrder + maxDiff - x1) + x1;
+        int x2 = random.nextInt(maxOrder + 2 * maxDiff - x0) + x0;
         FuzzyNumber fuzzyNumber = new FuzzyNumber(x1, x0, x2);
         logger.d("New fuzzy: " + fuzzyNumber.toString());
         return fuzzyNumber;

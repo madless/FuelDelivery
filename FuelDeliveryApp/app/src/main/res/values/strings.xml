@@ -6,4 +6,5 @@
     <string name="tv_select_city">Select source city</string>
     <string name="cancel">Cancel</string>
     <string name="save">Save</string>
+    <string name="titiel_dialog_add_delivery">Creating new delivery</string>
 </resources>

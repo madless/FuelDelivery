@@ -2,7 +2,14 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:padding="@dimen/dimen_15">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:textColor="@color/colorAccent"
+        android:text="@string/titiel_dialog_add_delivery"/>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -15,7 +22,7 @@
             android:layout_weight="1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:inputType="numberDecimal|numberSigned"
+            android:inputType="number"
             android:text="@string/et_amount_of_fuel"
             android:id="@+id/et_amount_of_fuel"
             android:hint=""/>
@@ -33,14 +40,14 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
         <Button
-            android:id="@+id/btn_clear"
+            android:id="@+id/btn_cancel"
             android:text="@string/cancel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:layout_marginRight="15dp"/>
+            android:layout_marginRight="@dimen/dimen_10"/>
         <Button
-            android:id="@+id/btn_ok"
+            android:id="@+id/btn_save"
             android:text="@string/save"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

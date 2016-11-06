@@ -1,5 +1,6 @@
 package com.codewizards.fueldeliveryapp.entities;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -25,6 +26,14 @@ public class Delivery {
         this.orders = orders;
         this.name = name;
         this.amountOfFuel = new FuzzyNumber(amountOfFuel, amountOfFuel, amountOfFuel);
+    }
+
+    public Delivery(int id, String name, City sourceCity, int amountOfFuel) {
+        this.id = id;
+        this.name = name;
+        this.sourceCity = sourceCity;
+        this.amountOfFuel = new FuzzyNumber(amountOfFuel, amountOfFuel, amountOfFuel);
+        this.orders = new ArrayList<>();
     }
 
     public int getId() {

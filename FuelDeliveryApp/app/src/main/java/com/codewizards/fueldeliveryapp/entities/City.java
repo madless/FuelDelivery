@@ -38,12 +38,18 @@ public class City {
         this.coordinates = coordinates;
     }
 
+//    @Override
+//    public String toString() {
+//        return "City{" +
+//                "id=" + id +
+//                ", name='" + name + '\'' +
+//                ", coordinates=" + coordinates +
+//                '}';
+//    }
+
+
     @Override
     public String toString() {
-        return "City{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", coordinates=" + coordinates +
-                '}';
+        return name;
     }
 }

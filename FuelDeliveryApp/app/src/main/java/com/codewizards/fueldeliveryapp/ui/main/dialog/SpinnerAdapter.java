@@ -21,7 +21,7 @@ public class SpinnerAdapter extends ArrayAdapter<City> {
     private int textViewResourceId;
     private List<City> cities;
     public SpinnerAdapter(Context context, int resource, int textViewResourceId, List<City> cities) {
-        super(context, resource, textViewResourceId);
+        super(context, resource, textViewResourceId, cities);
         this.context = context;
         this.resource = resource;
         this.textViewResourceId = textViewResourceId;

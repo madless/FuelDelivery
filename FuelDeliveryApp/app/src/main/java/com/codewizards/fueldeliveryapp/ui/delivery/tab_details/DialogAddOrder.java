@@ -79,12 +79,20 @@ public class DialogAddOrder extends DialogFragment implements View.OnClickListen
         super.onViewCreated(view, savedInstanceState);
         RepositoryManager.get().getCities().subscribe(cities -> {
             if(!delivery.getOrders().isEmpty()) {
-                Order lastOrder = delivery.getOrders().get(delivery.getOrders().size() - 1);
+                List<String> visitedCitiesNames = new ArrayList<>();
+                visitedCitiesNames.add(delivery.getSourceCity().getName());
+                for(Order order : delivery.getOrders()) {
+                    visitedCitiesNames.add(order.getCity().getName());
+                }
+                //Order lastOrder = delivery.getOrders().get(delivery.getOrders().size() - 1);
                 currentCities = new ArrayList<>();
                 for(City city : cities) {
-                    if(!city.getName().equals(lastOrder.getCity().getName())) {
+                    if(!visitedCitiesNames.contains(city.getName())) {
                         currentCities.add(city);
                     }
+//                    if(!city.getName().equals(lastOrder.getCity().getName())) {
+//                        currentCities.add(city);
+//                    }
                 }
             } else {
                 currentCities = cities;

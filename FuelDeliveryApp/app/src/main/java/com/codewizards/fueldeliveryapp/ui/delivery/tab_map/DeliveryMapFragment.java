@@ -18,6 +18,7 @@ import com.codewizards.fueldeliveryapp.entities.Coordinates;
 import com.codewizards.fueldeliveryapp.entities.Delivery;
 import com.codewizards.fueldeliveryapp.entities.Order;
 import com.codewizards.fueldeliveryapp.ui.delivery.BaseTabFragment;
+import com.codewizards.fueldeliveryapp.utils.calculator.FuzzyNumberHelper;
 import com.codewizards.fueldeliveryapp.utils.dijkstra.DijkstraCalc;
 import com.codewizards.fueldeliveryapp.utils.dijkstra.DijkstraXmlParser;
 import com.codewizards.fueldeliveryapp.utils.dijkstra.entities.Graph;
@@ -76,6 +77,7 @@ public class DeliveryMapFragment extends BaseTabFragment implements OnMapReadyCa
     private Marker trackingMarker;
     private Graph seaGraph;
     private List<Path> seaPathes;
+    List<Order> orders = new ArrayList<>();
     private int index;
     private int pathIndex;
 
@@ -148,6 +150,7 @@ public class DeliveryMapFragment extends BaseTabFragment implements OnMapReadyCa
     }
 
     public void resetData() {
+        orders.clear();
         index = 0;
         pathIndex = 0;
         seaPathes.clear();
@@ -160,7 +163,7 @@ public class DeliveryMapFragment extends BaseTabFragment implements OnMapReadyCa
     }
 
     public void fillMathWithOrderMarkers() {
-        if(map != null && activity != null && activity.getDelivery() != null && activity.getDelivery().getOrders() != null) {
+        if(map != null && orders != null) {
             LatLng srcLocation = new LatLng(getDelivery().getSourceCity().getCoordinates().getLat(), getDelivery().getSourceCity().getCoordinates().getLon());
             Marker srcMarker = map.addMarker(new MarkerOptions()
                     .position(srcLocation)
@@ -168,7 +171,6 @@ public class DeliveryMapFragment extends BaseTabFragment implements OnMapReadyCa
                     .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET))
             );
             markers.add(srcMarker);
-            List<Order> orders = activity.getDelivery().getOrders();
             for (Order order: orders) {
                 if(order != null && order.getCity() != null && order.getCity().getCoordinates() != null) {
                     City city = order.getCity();
@@ -192,7 +194,13 @@ public class DeliveryMapFragment extends BaseTabFragment implements OnMapReadyCa
         DijkstraXmlParser parser = new DijkstraXmlParser();
         try {
             seaGraph = parser.getGraph(is);
-            List<Order> orders = getOrders();
+            orders.addAll(getOrders());
+            for (int i = 0; i < orders.size(); i++) {
+                if(!FuzzyNumberHelper.isFuzzyValid(orders.get(i).getAmountOfFuelAfterOrder())) {
+                    orders.remove(i);
+                    i--;
+                }
+            }
             List<City> cities = new ArrayList<>(orders.size() + 1);
             cities.add(getDelivery().getSourceCity());
             for (Order order: orders) {
@@ -212,10 +220,20 @@ public class DeliveryMapFragment extends BaseTabFragment implements OnMapReadyCa
     }
 
     public void updateTrackingMarkerInfo() {
-        logger.i("updateTrackingMarkerInfo(): " + String.format(SHIP_ROUTE_FORMAT, getCurrentPath().getFrom().getName(), getCurrentPath().getTo().getName()));
-        trackingMarker.setTitle(String.format(SHIP_ROUTE_FORMAT, getCurrentPath().getFrom().getName(), getCurrentPath().getTo().getName()));
-        trackingMarker.setSnippet(String.format(SHIP_FUEL_FORMAT, getDelivery().getAmountOfFuel().toString()));
-        trackingMarker.showInfoWindow();
+        int orderIndex = pathIndex - 1;
+        logger.d("order index: " + orderIndex + ", orders: " + orders.size() + ", " + orders);
+        if(orders != null && orders.size() > orderIndex) {
+            if(orderIndex != orders.size() - 1) { // not last
+                trackingMarker.setTitle(String.format(SHIP_ROUTE_FORMAT, getCurrentPath().getFrom().getName(), getCurrentPath().getTo().getName()));
+            } else {
+                trackingMarker.setTitle("Delivered!");
+            }
+            trackingMarker.setSnippet(String.format(SHIP_FUEL_FORMAT, orders.get(orderIndex).getAmountOfFuelAfterOrder()));
+            trackingMarker.showInfoWindow();
+        } else {
+            logger.w("Some orders or index issues!");
+        }
+
     }
 
     public void updateCityMarker() {
@@ -223,19 +241,21 @@ public class DeliveryMapFragment extends BaseTabFragment implements OnMapReadyCa
     }
 
     public void updateLastCityMarker() {
-        markers.get(markers.size() - 1).setIcon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_ok_circle_bottom));
-        Coordinates c = getCurrentPathVertexes().get(getCurrentPathVertexes().size() - 1).getCoordinates();
-        LatLng location = new LatLng(c.getLat(), c.getLon());
-        CameraPosition cameraPosition =
-                new CameraPosition.Builder()
-                        .target(location)
-                        .tilt(0)
-                        .zoom(CAMERA_ZOOM)
-                        .build();
-        map.animateCamera(
-                CameraUpdateFactory.newCameraPosition(cameraPosition),
-                CAMERA_SPEED,
-                null);
+        if(pathIndex < seaPathes.size() - 1) {
+            markers.get(markers.size() - 1).setIcon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_ok_circle_bottom));
+            Coordinates c = getCurrentPathVertexes().get(getCurrentPathVertexes().size() - 1).getCoordinates();
+            LatLng location = new LatLng(c.getLat(), c.getLon());
+            CameraPosition cameraPosition =
+                    new CameraPosition.Builder()
+                            .target(location)
+                            .tilt(0)
+                            .zoom(CAMERA_ZOOM)
+                            .build();
+            map.animateCamera(
+                    CameraUpdateFactory.newCameraPosition(cameraPosition),
+                    CAMERA_SPEED,
+                    null);
+        }
     }
 
     public List<Vertex> getCurrentPathVertexes() {
@@ -319,7 +339,7 @@ public class DeliveryMapFragment extends BaseTabFragment implements OnMapReadyCa
                 // move path
                 start();
             } else {
-                logger.d("t >= 0, index: " + index);
+//                logger.d("t >= 0, index: " + index);
                 if(index < getCurrentPathVertexes().size() - 2) {
                     index++;
                     Coordinates c = getCurrentPathVertexes().get(index).getCoordinates();
@@ -346,8 +366,10 @@ public class DeliveryMapFragment extends BaseTabFragment implements OnMapReadyCa
                             start();
                         }, IN_CITY_DELAY);
                     } else {
-                        logger.i("Route passed! pathIndex: " + pathIndex);
+                        pathIndex++;
+                        logger.i("Route passed! pathIndex: " + pathIndex + ", seaPathes.size(): " + seaPathes.size());
                         updateLastCityMarker();
+                        updateTrackingMarkerInfo();
                         map.getUiSettings().setScrollGesturesEnabled(true); // enable map moves by tapping
                     }
                 }

@@ -128,7 +128,12 @@ public class DialogAddOrder extends DialogFragment implements View.OnClickListen
                 int x1 = Integer.valueOf(etLeftBorder.getText().toString());
                 int x0 = Integer.valueOf(etMaxValue.getText().toString());
                 int x2 = Integer.valueOf(etRightBorder.getText().toString());
-                amountOfFuel = new FuzzyNumber(x1, x0, x2);
+                if(x1 <= x0 && x0 <= x2) {
+                    amountOfFuel = new FuzzyNumber(x1, x0, x2);
+                } else {
+                    etLeftBorder.setError("Check x1 <= x0 <= x2");
+                    return;
+                }
             } else {
                 return;
             }

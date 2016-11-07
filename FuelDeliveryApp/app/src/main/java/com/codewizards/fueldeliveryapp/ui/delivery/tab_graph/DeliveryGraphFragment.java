@@ -3,6 +3,7 @@ package com.codewizards.fueldeliveryapp.ui.delivery.tab_graph;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,8 @@ import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.DataPointInterface;
 import com.jjoe64.graphview.series.LineGraphSeries;
 import com.jjoe64.graphview.series.OnDataPointTapListener;
+
+import java.util.Iterator;
 
 /**
  * Created by dmikhov on 21.10.2016.
@@ -72,11 +75,15 @@ public class DeliveryGraphFragment extends BaseTabFragment implements View.OnCli
         Order order = delivery.getOrders().get(currentId);
         FuzzyNumber amountOfFuel = order.getAmountOfFuel();
         FuzzyNumber amountOfFuelBeforeOrder = order.getAmountOfFuelBeforeOrder();
-        drawNumber(Color.RED, amountOfFuel, "A" + (currentId + 1));
-        drawNumber(Color.BLUE, amountOfFuelBeforeOrder, "Q" + currentId);
+        drawNumber(Color.BLUE, amountOfFuelBeforeOrder, "Q" + currentId + " = " + amountOfFuelBeforeOrder);
+        drawNumber(Color.RED, amountOfFuel, "A" + (currentId + 1) + " = " + amountOfFuel);
     }
 
     private void drawNumber(int color, FuzzyNumber number, final String title) {
+        if(number.getX0() == number.getX2()) {
+            specialDraw(color, number, title);
+            return;
+        }
         LineGraphSeries<DataPoint> series = new LineGraphSeries<DataPoint>(new DataPoint[] {
                 new DataPoint(number.getX1(), 0),
                 new DataPoint(number.getX0(), 1),
@@ -85,6 +92,22 @@ public class DeliveryGraphFragment extends BaseTabFragment implements View.OnCli
         series.setTitle(title);
         series.setColor(color);
         graph.addSeries(series);
+    }
+
+    private void specialDraw (int color, FuzzyNumber number, final String title) {
+        LineGraphSeries<DataPoint> series1 = new LineGraphSeries<DataPoint>(new DataPoint[] {
+                new DataPoint(number.getX1(), 0),
+                new DataPoint(number.getX0(), 1),
+        });
+        series1.setTitle(title);
+        series1.setColor(color);
+        graph.addSeries(series1);
+        LineGraphSeries<DataPoint> series2 = new LineGraphSeries<DataPoint>(new DataPoint[] {
+                new DataPoint(number.getX2(), 0),
+                new DataPoint(number.getX0(), 1),
+        });
+        series2.setColor(color);
+        graph.addSeries(series2);
     }
 
     @Override

@@ -50,8 +50,8 @@ public class FuzzyNumberHelper {
         return new FuzzyNumber(leftBorder, max, rightBorder);
     }
 
-    public static boolean isFuzzyValid(FuzzyNumber fuzzyNumber) {
-        return fuzzyNumber.getX1() > 0 && fuzzyNumber.getX1() <= fuzzyNumber.getX0() && fuzzyNumber.getX0() <= fuzzyNumber.getX2();
+    public static boolean isFuzzyValid( FuzzyNumber fuzzyNumber) {
+        return fuzzyNumber.getX1() >= 0 && fuzzyNumber.getX1() <= fuzzyNumber.getX0() && fuzzyNumber.getX0() <= fuzzyNumber.getX2();
     }
 
 }

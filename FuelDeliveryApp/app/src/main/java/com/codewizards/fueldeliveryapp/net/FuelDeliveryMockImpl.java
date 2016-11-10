@@ -36,6 +36,8 @@ public class FuelDeliveryMockImpl implements FuelDeliveryApi {
         Coordinates cd6 = new Coordinates(45.440847, 12.315515);
         Coordinates cd7 = new Coordinates(44.405650, 8.946256);
         Coordinates cd8 = new Coordinates(37.983810, 23.727539);
+        Coordinates cd9 = new Coordinates(37.793382, 12.431841);
+        Coordinates cd10 = new Coordinates(37.034917, 27.433435);
         City city1 = new City(0, "Dublin", cd1);
         City city2 = new City(1, "Odessa", cd2);
         City city3 = new City(2, "Istanbul", cd3);
@@ -44,6 +46,8 @@ public class FuelDeliveryMockImpl implements FuelDeliveryApi {
         City city6 = new City(5, "Venezia", cd6);
         City city7 = new City(6, "Genova", cd7);
         City city8 = new City(7, "Athens", cd8);
+        City city9 = new City(8, "Marsala", cd9);
+        City city10 = new City(9, "Bodrum", cd10);
         FuzzyNumber fn1 = new FuzzyNumber(100, 100, 200);
         FuzzyNumber fn2 = new FuzzyNumber(100, 150, 250);
         FuzzyNumber fn3 = new FuzzyNumber(90, 160, 170);
@@ -82,6 +86,8 @@ public class FuelDeliveryMockImpl implements FuelDeliveryApi {
         cities.add(city6);
         cities.add(city7);
         cities.add(city8);
+        cities.add(city9);
+        cities.add(city10);
         response = new BaseResponse(200);
     }
 

@@ -8,6 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.codewizards.fueldeliveryapp.R;
@@ -31,6 +33,10 @@ public class DeliveryGraphFragment extends BaseTabFragment implements View.OnCli
     private GraphView graph;
     private Button btnNext;
     private Button btnPrev;
+    private LinearLayout legend;
+    private TextView tvQ;
+    private TextView tvA;
+    private TextView tvQnew;
     private int currentId;
     private Delivery delivery;
     @Nullable
@@ -40,6 +46,10 @@ public class DeliveryGraphFragment extends BaseTabFragment implements View.OnCli
         graph = (GraphView) root.findViewById(R.id.graph);
         btnNext = (Button) root.findViewById(R.id.btn_next);
         btnPrev = (Button) root.findViewById(R.id.btn_prev);
+        legend = (LinearLayout) root.findViewById(R.id.legend);
+        tvQ = (TextView) root.findViewById(R.id.tv_Q);
+        tvA = (TextView) root.findViewById(R.id.tv_A);
+        tvQnew = (TextView) root.findViewById(R.id.tv_Qnew);
         btnNext.setOnClickListener(this);
         btnPrev.setOnClickListener(this);
         return root;
@@ -51,9 +61,11 @@ public class DeliveryGraphFragment extends BaseTabFragment implements View.OnCli
         delivery = activity.getDelivery();
         if(delivery.getOrders() != null && !delivery.getOrders().isEmpty()) {
             drawGraph();
+            legend.setVisibility(View.VISIBLE);
         } else {
             btnNext.setEnabled(false);
             btnPrev.setEnabled(false);
+            legend.setVisibility(View.GONE);
         }
         if(delivery.getOrders().size() == 1) {
             btnNext.setEnabled(false);
@@ -67,7 +79,7 @@ public class DeliveryGraphFragment extends BaseTabFragment implements View.OnCli
         graph.getViewport().setMinX(0);
         graph.getViewport().setMaxX(delivery.getAmountOfFuel().getX2());
 
-        graph.getLegendRenderer().setVisible(true);
+        //graph.getLegendRenderer().setVisible(true);
     }
 
     private void drawGraph() {
@@ -75,8 +87,13 @@ public class DeliveryGraphFragment extends BaseTabFragment implements View.OnCli
         Order order = delivery.getOrders().get(currentId);
         FuzzyNumber amountOfFuel = order.getAmountOfFuel();
         FuzzyNumber amountOfFuelBeforeOrder = order.getAmountOfFuelBeforeOrder();
+        FuzzyNumber amountOfFuelAfterOrder = order.getAmountOfFuelAfterOrder();
         drawNumber(Color.BLUE, amountOfFuelBeforeOrder, "Q" + currentId + " = " + amountOfFuelBeforeOrder);
+        tvQ.setText("Q" + currentId + " = " + amountOfFuelBeforeOrder);
         drawNumber(Color.RED, amountOfFuel, "A" + (currentId + 1) + " = " + amountOfFuel);
+        tvA.setText("A" + (currentId + 1) + " = " + amountOfFuel);
+        drawNumber(Color.GREEN, amountOfFuelAfterOrder, "Q* = " + amountOfFuelAfterOrder);
+        tvQnew.setText("Q* = " + amountOfFuelAfterOrder);
     }
 
     private void drawNumber(int color, FuzzyNumber number, final String title) {

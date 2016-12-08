@@ -12,6 +12,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.codewizards.fueldeliveryapp.R;
 import com.codewizards.fueldeliveryapp.entities.City;
@@ -121,7 +122,11 @@ public class DialogAddOrder extends DialogFragment implements View.OnClickListen
                 dismiss();
                 break;
             case R.id.btn_save:
-                saveOrder();
+                if(selectedCity != null) {
+                    saveOrder();
+                } else {
+                    Toast.makeText(getActivity(), "can't save order with empty city", Toast.LENGTH_SHORT).show();
+                }
                 break;
         }
     }

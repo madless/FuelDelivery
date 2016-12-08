@@ -49,7 +49,7 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.Holder> {
             } else {
                 holder.tvFuelBeforeOrder.setText("No data!");
             }
-            if(!FuzzyNumberHelper.isFuzzyValid(order.getAmountOfFuelAfterOrder())) {
+            if(!FuzzyNumberHelper.isFuzzyValid(order.getAmountOfFuelAfterOrder()) && order.getCity() != null) {
                 holder.tvCityName.setText(order.getCity().getName() + " (invalid)");
             }
         }

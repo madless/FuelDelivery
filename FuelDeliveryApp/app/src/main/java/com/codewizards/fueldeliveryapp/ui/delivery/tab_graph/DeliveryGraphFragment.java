@@ -3,14 +3,12 @@ package com.codewizards.fueldeliveryapp.ui.delivery.tab_graph;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.codewizards.fueldeliveryapp.R;
 import com.codewizards.fueldeliveryapp.entities.Delivery;
@@ -18,13 +16,10 @@ import com.codewizards.fueldeliveryapp.entities.FuzzyNumber;
 import com.codewizards.fueldeliveryapp.entities.Order;
 import com.codewizards.fueldeliveryapp.ui.delivery.AddOrderListener;
 import com.codewizards.fueldeliveryapp.ui.delivery.BaseTabFragment;
+import com.codewizards.fueldeliveryapp.utils.calculator.FuzzyNumberHelper;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.series.DataPoint;
-import com.jjoe64.graphview.series.DataPointInterface;
 import com.jjoe64.graphview.series.LineGraphSeries;
-import com.jjoe64.graphview.series.OnDataPointTapListener;
-
-import java.util.Iterator;
 
 /**
  * Created by dmikhov on 21.10.2016.
@@ -148,7 +143,7 @@ public class DeliveryGraphFragment extends BaseTabFragment implements View.OnCli
                     btnPrev.setEnabled(true);
                 }
             }
-            if(currentId == maxId) {
+            if(currentId == maxId || !FuzzyNumberHelper.isFuzzyValid(delivery.getOrders().get(currentId+1).getAmountOfFuelAfterOrder())) {
                 btnNext.setEnabled(false);
             }
             drawGraph();
